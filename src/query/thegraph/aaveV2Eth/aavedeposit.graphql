@@ -1,0 +1,8 @@
+query deposits($user: String) {
+  deposits(where: { account: $user }) {
+    id
+    account {
+      id
+    }
+  }
+}

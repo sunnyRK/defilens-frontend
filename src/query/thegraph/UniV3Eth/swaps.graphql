@@ -1,0 +1,31 @@
+query swaps($account: String) {
+  swaps(where: { account: $account }) {
+    account {
+      id
+    }
+    amountIn
+    amountInUSD
+    amountOut
+    amountOutUSD
+    hash
+    blockNumber
+    timestamp
+    logIndex
+    tokenIn {
+      id
+      name
+      symbol
+      decimals
+      lastPriceUSD
+      lastPriceBlockNumber
+    }
+    tokenOut {
+      id
+      name
+      symbol
+      decimals
+      lastPriceUSD
+      lastPriceBlockNumber
+    }
+  }
+}

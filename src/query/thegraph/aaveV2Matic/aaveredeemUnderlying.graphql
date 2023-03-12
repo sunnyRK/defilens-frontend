@@ -1,0 +1,22 @@
+query redeemUnderlying($user: String) {
+  redeemUnderlyings(orderBy: id, where: { user: $user }) {
+    id
+    action
+    amount
+    assetPriceUSD
+    txHash
+    user {
+      id
+    }
+    reserve {
+      symbol
+      name
+      decimals
+      aToken {
+        id
+        underlyingAssetAddress
+        underlyingAssetDecimals
+      }
+    }
+  }
+}

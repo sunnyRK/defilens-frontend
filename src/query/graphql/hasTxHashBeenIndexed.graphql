@@ -1,0 +1,11 @@
+query HasTxHashBeenIndexed($request: HasTxHashBeenIndexedRequest!) {
+  hasTxHashBeenIndexed(request: $request) {
+    ... on TransactionIndexedResult {
+      indexed
+      metadataStatus {
+        status
+        reason
+      }
+    }
+  }
+}

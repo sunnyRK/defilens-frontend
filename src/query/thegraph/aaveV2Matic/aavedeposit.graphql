@@ -1,0 +1,22 @@
+query deposits($user: String) {
+  deposits(orderBy: id, where: { user: $user }) {
+    id
+    amount
+    action
+    txHash
+    user {
+      id
+    }
+    reserve {
+      id
+      symbol
+      name
+      decimals
+      aToken {
+        id
+        underlyingAssetAddress
+        underlyingAssetDecimals
+      }
+    }
+  }
+}

@@ -1,15 +1,15 @@
-import { DepositsDocument as DepositsDocumentEth } from "../../query/thegraph/aaveV2Eth/generated";
+import { DepositsDocument as DepositsDocumentEth } from "../query/thegraph/aaveV2Eth/generated";
 import {
   DepositsDocument as DepositsDocumentMatic,
   RedeemUnderlyingDocument,
-} from "../../query/thegraph/aaveV2Matic/generated";
-import { SwapsDocument } from "../../query/thegraph/UniV3Eth/generated";
+} from "../query/thegraph/aaveV2Matic/generated";
+import { SwapsDocument } from "../query/thegraph/UniV3Eth/generated";
 import {
   AAVE_V2_ETHEREUM_SUBGRAPH,
   AAVE_V2_MATIC_SUBGRAPH,
   UNISWAP_V3_ETHEREUM_SUBGRAPH,
-} from "../../utils/constants";
-import { Network } from "../../utils/helper";
+} from "./constants";
+import { Network } from "./helper";
 
 export const protocolOptions = [
   {

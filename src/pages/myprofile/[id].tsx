@@ -11,7 +11,7 @@ import {
   useQueryHookForUniV3,
 } from "../../lib/hooks/commonQueryHook/useQueryHook";
 import Deposit from "../../components/apps/aave/aaveV2Matic/Deposit";
-import { protocolOptions, queryKeyToMetadata } from "./utils";
+import { protocolOptions, queryKeyToMetadata } from "../../utils/utils";
 import Withdraw from "../../components/apps/aave/aaveV2Matic/Withdraw";
 import { lensCommonSchema } from "../../types";
 import useLensUser from "../../lib/auth/useLensUser";

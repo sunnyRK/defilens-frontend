@@ -23,7 +23,7 @@ export default function Home() {
     sortCriteria: PublicationSortCriteria.Latest,
     publicationTypes: [PublicationTypes.Post],
     sources: ["defilens-demo-3"],
-    limit: 1,
+    limit: 50,
   };
 
   const { isLoading, error, data, fetchStatus } =

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ExplorePublicationsQuery,
   usePublicationsQuery,
@@ -22,16 +22,27 @@ import {
   Button,
 } from "semantic-ui-react";
 import { toast } from "react-toastify";
-import { formatUrl } from "../../utils/helper";
+import { formatUrl, Network } from "../../utils/helper";
 import zapIn_deposit_abi from "../apps/aave/aaveV2Matic/abis/zapIn_deposit.json";
 import { ZapIn_AAVE_V2_Deposit_Matic } from "../apps/aave/aaveV2Matic/helpers/constants";
 import { getProvider } from "../../utils/helper";
+import { getEvent, getContractByTxHash } from "../../lib/events";
+import { getDsa } from "../../lib/dsa/dsa";
+import { useAddress, useSDK, useSigner } from "@thirdweb-dev/react";
+import { add } from "lodash";
+import { getMethodDataFromTx, getNewEvent } from "../../lib/demo_events";
+import web3 from "web3";
+import { ethers } from "ethers";
 
 type Props = {
   publication: ExplorePublicationsQuery["explorePublications"]["items"][0];
 };
 
 export default function NewsFeed({ publication }: Props) {
+  const address = useAddress(); // Detect the connected address
+  const sdk = useSDK();
+  const signer = useSigner();
+
   const { mutateAsync: createComment } = useCreateComment();
   const [comment, setComment] = useState("");
   const [collectLoading, setCollectLoading] = useState(false);
@@ -44,7 +55,34 @@ export default function NewsFeed({ publication }: Props) {
   const { mutateAsync: like } = useLike();
   const { mutateAsync: createMirror } = useNewMirror();
   const { mutateAsync: createCollect } = useCollect();
-  console.log("publication==", publication);
+  // console.log("signer==", signer);
+
+  // getEvent();
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const data: any = await getMethodDataFromTx();
+  //     console.log('data==', data);
+
+  //     const contract = await getContractByTxHash(
+  //       publication.metadata.attributes[
+  //         publication.metadata.attributes.length - 1
+  //       ].value,
+  //       publication.metadata.attributes[0].value,
+  //       // data[0]
+  //     );
+
+  //     await contract
+
+  //     // let provider = new ethers.providers.Web3Provider(web3.givenProvider);
+  //     // if (!sdk) return;
+  //     // const lensHubContract = await sdk.getContractFromAbi(
+  //     //   data[0],
+  //     //   data[0]
+  //     // );
+  //   }
+  //   getData();
+  // }, [])
 
   // fetch comment for publication
   const {
@@ -108,14 +146,44 @@ export default function NewsFeed({ publication }: Props) {
     }
   };
 
-  const handleCopyTrade = async (e: any, data: any) => {
+  const handleCopyTrade = async (
+    e: any,
+    network: any,
+    txHash: any,
+    methodName: any
+  ) => {
     try {
-      
+      // console.log('handleCopyTrade', txHash, methodName);
+      // if (address) {
+      //   await getDsa(address);
+      // }
+      // console.log('handleCopyTrade-address', address);
+
+      // Network
+      // Provider
+      // Contract Address and Instance
+      // ABI
+      // Method Name
+      // Params
+
+      if (network == Network.POLYGON_MAINNET) {
+        // console.log('event-network-1', network);
+        // await getNewEvent(
+        //   "polygon",
+        //   txHash,
+        // );
+        await getMethodDataFromTx(signer);
+      } else if (network == Network.ETHEREUM_MAINNET) {
+        console.log("event-network-2", network);
+        await getNewEvent("mainnet", txHash);
+      } else if (network == Network.OPTIMISM_MAINNET) {
+        console.log("event-network-3", network);
+        await getNewEvent("optimism", txHash);
+      }
     } catch (error) {
       console.log("handleCopyTrade-error", error);
     }
-  }
-
+  };
 
   return (
     <>
@@ -166,7 +234,7 @@ export default function NewsFeed({ publication }: Props) {
                 <Table.Body>
                   {publication.metadata.attributes &&
                     publication.metadata.attributes
-                      .slice(5, publication.metadata.attributes.length - 1)
+                      .slice(5, publication.metadata.attributes.length - 2)
                       .map((attributes, index) => (
                         <Table.Row key={index}>
                           {attributes.traitType &&
@@ -267,7 +335,16 @@ export default function NewsFeed({ publication }: Props) {
               loading={mirrorLoading}
               color="grey"
               onClick={async (e) => {
-                return await handleCopyTrade(e, publication.id);
+                return await handleCopyTrade(
+                  e,
+                  publication.metadata.attributes[0].value,
+                  publication.metadata.attributes[
+                    publication.metadata.attributes.length - 1
+                  ].value,
+                  publication.metadata.attributes[
+                    publication.metadata.attributes.length - 2
+                  ].value
+                );
               }}
             >
               <Icon name="copy" />

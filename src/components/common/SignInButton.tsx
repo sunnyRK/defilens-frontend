@@ -6,6 +6,7 @@ import {
   MediaRenderer,
 } from "@thirdweb-dev/react";
 import React from "react";
+import { isTokenExpired } from "../../lib/auth/helpers";
 import useLensUser from "../../lib/auth/useLensUser";
 import useLogin from "../../lib/auth/useLogin";
 import { chainId } from "../../utils/constants";
@@ -36,9 +37,14 @@ export default function SignInButton({}: Props) {
     return <div>Loading...</div>;
   }
 
+  if (isTokenExpired()) {
+    console.log("time Expired ++++");
+    return <button onClick={() => requestLogin()}>Sign in with Lens1</button>;
+  }
+
   // If the user is not signed in, we need to request a login
   if (!isSignedInQuery.data) {
-    return <button onClick={() => requestLogin()}>Sign in with Lens</button>;
+    return <button onClick={() => requestLogin()}>Sign in with Lens2</button>;
   }
 
   // Loading their profile information
@@ -48,7 +54,7 @@ export default function SignInButton({}: Props) {
 
   // If it's done loading and there's no default profile
   if (!profileQuery.data?.defaultProfile) {
-    return <div>No Lens Profilee.</div>;
+    return <div>No Lens Profile.</div>;
   }
 
   // If it's done loading and there's a default profile

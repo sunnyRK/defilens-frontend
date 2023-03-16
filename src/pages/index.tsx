@@ -13,19 +13,20 @@ import styles from "../styles/Home.module.css";
 import { formatDate, formatUrl, Network } from "../utils/helper";
 import { Accordion, Icon, Message, Comment, Button } from "semantic-ui-react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import useLensUser from "../lib/auth/useLensUser";
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  // const SCROLL_THRESHOLD = 0.5;
+  const { isSignedInQuery, profileQuery } = useLensUser();
 
   const request = {
     sortCriteria: PublicationSortCriteria.Latest,
     publicationTypes: [PublicationTypes.Post],
-    sources: ["defilens-demo-2"],
-    limit: 10,
+    sources: ["defilens-demo-3"],
+    limit: 1,
   };
 
-  const { isLoading, error, data, fetchStatus, refetch } =
+  const { isLoading, error, data, fetchStatus } =
     useExplorePublicationsQuery(
       {
         request,
@@ -37,17 +38,6 @@ export default function Home() {
       }
     );
   console.log("data", data, fetchStatus);
-
-  const explorePublications = data?.explorePublications?.items ?? [];
-  const pageInfo = data?.explorePublications?.pageInfo;
-  const hasMore =
-    pageInfo?.next && explorePublications?.length !== pageInfo.totalCount;
-
-  // const loadMore = async () => {
-  //   await refetch().then((data) => {
-  //     console.log('data-loadMore: ', data);
-  //   })
-  // };
 
   // const {
   //   isLoading,
@@ -104,7 +94,13 @@ export default function Home() {
                 <Comment>
                   <Comment.Avatar
                     //  @ts-ignore
-                    src={`https://ipfs.io/ipfs/${formatUrl(publication?.profile?.picture?.original?.url)[1]}` || ""}
+                    src={
+                      `https://ipfs.io/ipfs/${
+                        formatUrl(
+                          publication?.profile?.picture?.original?.url
+                        )[1]
+                      }` || ""
+                    }
                   />
                   <Comment.Content>
                     <Comment.Author as="a">
@@ -128,10 +124,6 @@ export default function Home() {
                         target="_blank"
                         rel="noreferrer"
                       >
-                        {/* https://polygonscan.com/tx/${
-                          publication.metadata.attributes[
-                            publication.metadata.attributes.length - 1
-                          ].value */}
                         View Tx
                       </a>
                     </Comment.Text>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useApplyForLens_AA } from "../../../../lib/hooks/profileHook/useApplyForLens_AA";
 import { lensCommonSchema } from "../../../../types";
 import useLensUser from "../../../../lib/auth/useLensUser";
-import useLogin from "../../../../lib/auth/useLogin";
 import { AaveV2MaticAttributesWithdraw } from "./types";
 import { Button, Card } from "semantic-ui-react";
 import { getAmount, getERC20Details, Network } from "../../../../utils/helper";
@@ -15,7 +14,6 @@ export default function Withdraw({
 }: any) {
   const { mutateAsync: applyForLens_AA } = useApplyForLens_AA();
   const { isSignedInQuery, profileQuery } = useLensUser();
-  const { mutate: requestLogin } = useLogin();
   const [postLoading, setPostLoading] = useState(false);
 
   // Loading their signed in state
@@ -24,9 +22,9 @@ export default function Withdraw({
   }
 
   // If the user is not signed in, we need to request a login
-  if (!isSignedInQuery.data) {
-    return <button onClick={() => requestLogin()}>Sign in with Lens</button>;
-  }
+  // if (!isSignedInQuery.data) {
+  //   return <button onClick={() => requestLogin()}>Sign in with Lens</button>;
+  // }
 
   // Loading their profile information
   if (profileQuery.isLoading) {
@@ -133,6 +131,11 @@ export default function Withdraw({
         displayType: "string",
         value: tokenOutData?.decimals,
       },
+      // {
+      //   traitType: "MethodName",
+      //   displayType: "string",
+      //   value: "withdraw",
+      // },
       {
         traitType: "TxHash",
         displayType: "string",

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useApplyForLens_AA } from "../../../lib/hooks/profileHook/useApplyForLens_AA";
 import { lensCommonSchema } from "../../../types";
 import useLensUser from "../../../lib/auth/useLensUser";
-import useLogin from "../../../lib/auth/useLogin";
 import { UniV3Swap } from "./types";
 import { Button, Card } from "semantic-ui-react";
 import { getAmount, getERC20Details, Network } from "../../../utils/helper";
@@ -11,7 +10,6 @@ import { toast } from "react-toastify";
 export default function UniV2({ swap, queryKeyToMetadata, defaultKey }: any) {
   const { mutateAsync: applyForLens_AA } = useApplyForLens_AA();
   const { isSignedInQuery, profileQuery } = useLensUser();
-  const { mutate: requestLogin } = useLogin();
   const [postLoading, setPostLoading] = useState(false);
   console.log("swap:", swap);
 
@@ -20,10 +18,10 @@ export default function UniV2({ swap, queryKeyToMetadata, defaultKey }: any) {
     return <div>Loading...</div>;
   }
 
-  // If the user is not signed in, we need to request a login
-  if (!isSignedInQuery.data) {
-    return <button onClick={() => requestLogin()}>Sign in with Lens</button>;
-  }
+  // // If the user is not signed in, we need to request a login
+  // if (!isSignedInQuery.data) {
+  //   return <button onClick={() => requestLogin()}>Sign in with Lens</button>;
+  // }
 
   // Loading their profile information
   if (profileQuery.isLoading) {

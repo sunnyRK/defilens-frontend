@@ -7,6 +7,8 @@ import { AaveV2MaticAttributes } from "./types";
 import { Button, Card } from "semantic-ui-react";
 import { getAmount, getERC20Details, Network } from "../../../../utils/helper";
 import { toast } from "react-toastify";
+import { useApplyForLens } from "../../../../lib/hooks/profileHook/useApplyForLens";
+import { isTokenExpired, readAccessToken } from "../../../../lib/auth/helpers";
 
 export default function Deposit({
   deposit,
@@ -14,6 +16,7 @@ export default function Deposit({
   defaultKey,
 }: any) {
   const { mutateAsync: applyForLens_AA } = useApplyForLens_AA();
+  const { mutateAsync: applyForLens } = useApplyForLens();
   const { isSignedInQuery, profileQuery } = useLensUser();
   const { mutate: requestLogin } = useLogin();
   const [postLoading, setPostLoading] = useState(false);
@@ -50,7 +53,6 @@ export default function Deposit({
       tokenOutData?.decimals
     );
 
-    console.log("makeAttributes==", amountIn, amountOut);
     return [
       {
         traitType: "Chain name",
@@ -148,18 +150,23 @@ export default function Deposit({
     amountsOut: deposit.amount,
     txHash: deposit.txHash,
   };
-  // const attributes: any = await makeAttributes(makedata);
-  // console.log('attributes==', attributes);
 
   // Loading their signed in state
   if (isSignedInQuery.isLoading) {
     return <div>Loading...</div>;
   }
 
-  // If the user is not signed in, we need to request a login
-  if (!isSignedInQuery.data) {
-    return <button onClick={() => requestLogin()}>Sign in with Lens</button>;
-  }
+  // if (isTokenExpired()) {
+  //   // console.log("time Expired +++", Date.now());
+  //   return <button onClick={() => requestLogin()}>Sign in with Lenss</button>;
+  // } else {
+  //   console.log('time not expired accessTokens++:', data.exp*1000, Date.now());
+  // }
+
+  // // If the user is not signed in, we need to request a login
+  // if (!isSignedInQuery.data) {
+  //   return <button onClick={() => requestLogin()}>Sign in with Lens</button>;
+  // }
 
   // Loading their profile information
   if (profileQuery.isLoading) {
@@ -238,7 +245,8 @@ export default function Deposit({
                 };
                 attributes?.length > 0
                   ? await applyForLens_AA(commonSchema)
-                  : alert("Wait");
+                  : // await applyForLens(commonSchema)
+                    alert("Wait");
                 setPostLoading(false);
                 toast.success(`Posted successfully.`);
               } catch (error) {

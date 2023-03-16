@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAddress, useSDK } from "@thirdweb-dev/react";
 import { useAuthenticateMutation } from "../../query/graphql/generated";
 import generateChallenge from "./generateChallenge";
-import { readAccessToken, setAccessToken } from "./helpers";
+import { isTokenExpired, setAccessToken } from "./helpers";
 
 export default function useLogin() {
   const address = useAddress();
@@ -12,10 +12,11 @@ export default function useLogin() {
 
   // 1. Write the actual async function
   async function login() {
-    // if (readAccessToken()) {
-    //   console.log("login: already logged in");
-    //   return;
-    // }
+    if (!isTokenExpired()) {
+      console.log("login: already logged in");
+      return;
+    }
+
     if (!address) return;
 
     // 1. Generate challenge which comes from the Lens API

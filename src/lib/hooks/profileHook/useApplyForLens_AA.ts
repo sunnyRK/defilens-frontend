@@ -37,7 +37,7 @@ export function useApplyForLens_AA() {
     let smartAccount = new SmartAccount(provider, options);
     smartAccount = await smartAccount.init();
 
-    console.log("applyforlens", commonData);
+    // console.log("applyforlens", commonData);
     // 0. Login
     await loginUser();
 
@@ -67,8 +67,8 @@ export function useApplyForLens_AA() {
     const postMetadataIpfsUrl = (
       await uploadToIpfs({ data: [postMetadata] })
     )[0];
-    console.log("postMetadata", postMetadata);
-    console.log("postMetadataIpfsUrl", postMetadataIpfsUrl);
+    // console.log("postMetadata", postMetadata);
+    // console.log("postMetadataIpfsUrl", postMetadataIpfsUrl);
 
     // 1. Ask Lens to give us the typed data
     const typedData = await requestTypedData({
@@ -108,8 +108,6 @@ export function useApplyForLens_AA() {
     // create an array of txs
     const txs = [];
 
-    console.info("smartAccount==contentURI", contentURI);
-
     const data = await lensHubContract.populateTransaction.post({
       profileId: profileId,
       contentURI: contentURI,
@@ -133,14 +131,14 @@ export function useApplyForLens_AA() {
     const feeQuotes = await smartAccount.prepareRefundTransactionBatch({
       transactions: txs,
     });
-    console.log("smartAccount==feeQuotes", feeQuotes);
+    // console.log("smartAccount==feeQuotes", feeQuotes);
 
     // Choose a fee quote of your choice provided by the relayer
     const transaction = await smartAccount.createRefundTransactionBatch({
       transactions: txs,
       feeQuote: feeQuotes[1],
     });
-    console.log("smartAccount==transaction", transaction);
+    // console.log("smartAccount==transaction", transaction);
 
     // optional
     let gasLimit = {
@@ -153,7 +151,7 @@ export function useApplyForLens_AA() {
       tx: transaction,
       gasLimit,
     });
-    console.log("smartAccount==txHash", txHash);
+    // console.log("smartAccount==txHash", txHash);
     toast.success(`Tx Submitted successfully.`);
 
     // console.log("create post: poll until indexed");

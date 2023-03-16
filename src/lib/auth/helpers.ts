@@ -1,10 +1,15 @@
-const STORAGE_KEY = "LH_STORAGE_KEY";
-
-// Simple function to say if the token is expired or not
-export function isTokenExpired(exp: number) {
-  if (!exp) return true;
-
-  if (Date.now() >= exp * 1000) {
+export function isTokenExpired() {
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken || accessToken === "undefined") {
+    return true;
+  }
+  console.log("isTokenExpired-Date.now()", Date.now());
+  console.log("isTokenExpired-exp * 1000", parseJwt(accessToken)?.exp * 1000);
+  console.log("isTokenExpired-diffff+++",
+    parseJwt(accessToken)?.exp * 1000 - Date.now(),
+    (parseJwt(accessToken)?.exp * 1000 - Date.now())/60000
+  );
+  if (Date.now() <= parseJwt(accessToken)?.exp * 1000) {
     return false;
   }
   return true;
@@ -12,19 +17,15 @@ export function isTokenExpired(exp: number) {
 
 // 1. Reading the access token from storage
 export function readAccessToken() {
-  // Make sure we're on a client-side environment
   if (typeof window === "undefined") return null;
-
   const ls = localStorage || window.localStorage;
-
   if (!ls) {
     throw new Error("LocalStorage is not available");
   }
-
-  const data = ls.getItem(STORAGE_KEY);
-
-  if (!data) return null;
-
+  const accessToken: any = localStorage.getItem("accessToken");
+  const refreshToken: any = localStorage.getItem("refreshToken");
+  const exp: any = parseJwt(accessToken)?.exp * 1000;
+  const data = JSON.stringify({ accessToken, refreshToken, exp });
   return JSON.parse(data) as {
     accessToken: string;
     refreshToken: string;
@@ -34,17 +35,12 @@ export function readAccessToken() {
 
 // 2. Setting the  access token in storage
 export function setAccessToken(accessToken: string, refreshToken: string) {
-  // 1. Parse the JWT token to get the expiration date
-  const { exp } = parseJwt(accessToken);
-
-  // 2. Set all three variables in side local storage using the storage key
   const ls = localStorage || window.localStorage;
-
   if (!ls) {
     throw new Error("LocalStorage is not available");
   }
-
-  ls.setItem(STORAGE_KEY, JSON.stringify({ accessToken, refreshToken, exp }));
+  ls.setItem("accessToken", accessToken);
+  ls.setItem("refreshToken", refreshToken);
 }
 
 // 3. Parse the JWT token that comes back and extract the exp date field

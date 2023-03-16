@@ -16,11 +16,16 @@ export const fetcher = <TData, TVariables>(
     let accessToken = token.accessToken;
 
     // 3. If there is a token, then check it's expiration
-    if (isTokenExpired(token.exp)) {
+    if (isTokenExpired()) {
       // 4. If it's expired, update it using the refresh token
       const newToken = await refreshAccessToken();
       if (!newToken) return null;
       accessToken = newToken;
+      const ls = localStorage || window.localStorage;
+      if (!ls) {
+        throw new Error("LocalStorage is not available");
+      }
+      ls.setItem("accessToken", accessToken);
     }
 
     // Finally, return the token

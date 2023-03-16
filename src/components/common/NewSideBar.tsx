@@ -42,6 +42,15 @@ export default function NewSideBar({ children }: Props) {
                     My Profile
                   </a>
                 </div>
+                <div style={{ margin: "20px", color: "white" }}>
+                  <Icon name="user" />
+                  <a
+                    href={`/createprofile/create`}
+                    className={styles.feedPostProfileName}
+                  >
+                    Create Profile
+                  </a>
+                </div>
               </Sidebar>
 
               <Sidebar.Pusher>

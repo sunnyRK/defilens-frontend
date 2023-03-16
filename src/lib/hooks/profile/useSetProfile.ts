@@ -3,6 +3,7 @@ import { useSDK, useStorageUpload, useSigner } from "@thirdweb-dev/react";
 import {
   PublicationMainFocus,
   useCreatePostTypedDataMutation,
+  useCreateSetDefaultProfileTypedDataMutation,
 } from "../../../query/graphql/generated";
 import useLensUser from "../../auth/useLensUser";
 import {
@@ -20,66 +21,59 @@ import { pollUntilIndexed } from "../../indexing/tx_index";
 import { lensCommonSchema } from "../../../types";
 import { toast } from "react-toastify";
 
-export function useApplyForLens() {
-  const { mutateAsync: requestTypedData } = useCreatePostTypedDataMutation();
+export function useSetProfile() {
+  const { mutateAsync: requestTypedData } =
+    useCreateSetDefaultProfileTypedDataMutation();
   const { mutateAsync: uploadToIpfs } = useStorageUpload();
   const { profileQuery } = useLensUser();
   const { mutateAsync: loginUser } = useLogin();
   const sdk = useSDK();
   const signer = useSigner();
 
-  async function applyForLens(commonData: lensCommonSchema): Promise<void> {
+  async function setProfile(): Promise<void> {
     try {
       // console.log("applyforlens", commonData);
       // 0. Login
       await loginUser();
 
-      let imageIpfsUrl = commonData.image;
+      // let imageIpfsUrl = commonData.image;
       // if (commonData.image) {
       //   imageIpfsUrl = (await uploadToIpfs({ data: [commonData.image] }))[0];
       // }
 
-      const postMetadata = {
-        version: "2.0.0",
-        mainContentFocus: PublicationMainFocus.TextOnly,
-        metadata_id: uuidv4(),
-        description: commonData.description,
-        locale: "en-US",
-        content: commonData.content,
-        external_url: null,
-        image: imageIpfsUrl,
-        imageMimeType: null,
-        name: commonData.name,
-        attributes: commonData.attributes,
-        tags: [],
-        appId: "defilens-demo-3",
-        createdOn: new Date(),
-        media: [],
-      };
+      // const postMetadata = {
+      //   version: "2.0.0",
+      //   mainContentFocus: PublicationMainFocus.TextOnly,
+      //   metadata_id: uuidv4(),
+      //   description: commonData.description,
+      //   locale: "en-US",
+      //   content: commonData.content,
+      //   external_url: null,
+      //   image: imageIpfsUrl,
+      //   imageMimeType: null,
+      //   name: commonData.name,
+      //   attributes: commonData.attributes,
+      //   tags: [],
+      //   appId: "defilens-demo-3",
+      //   createdOn: new Date(),
+      //   media: [],
+      // };
 
-      const postMetadataIpfsUrl = (
-        await uploadToIpfs({ data: [postMetadata] })
-      )[0];
+      // const postMetadataIpfsUrl = (
+      //   await uploadToIpfs({ data: [postMetadata] })
+      // )[0];
       // console.log("postMetadata", postMetadata);
       // console.log("postMetadataIpfsUrl", postMetadataIpfsUrl);
 
       // 1. Ask Lens to give us the typed data
       const typedData = await requestTypedData({
         request: {
-          collectModule: {
-            freeCollectModule: {
-              followerOnly: false,
-            },
-          },
-          referenceModule: {
-            followerOnlyReferenceModule: false,
-          },
-          contentURI: postMetadataIpfsUrl,
-          profileId: profileQuery.data?.defaultProfile?.id,
+          profileId: "0x59c8",
         },
       });
 
-      const { domain, types, value } = typedData.createPostTypedData.typedData;
+      const { domain, types, value } =
+        typedData.createSetDefaultProfileTypedData.typedData;
 
       if (!sdk) return;
 
@@ -99,23 +93,12 @@ export function useApplyForLens() {
       );
 
       // Destructure the stuff we need out of the typedData.value field
-      const {
-        collectModule,
-        collectModuleInitData,
-        contentURI,
-        deadline,
-        profileId,
-        referenceModule,
-        referenceModuleInitData,
-      } = typedData.createPostTypedData.typedData.value;
+      const { deadline, profileId, wallet } =
+        typedData.createSetDefaultProfileTypedData.typedData.value;
 
-      const tx = await lensHubContract.postWithSig({
+      const tx = await lensHubContract.setDefaultProfileWithSig({
         profileId: profileId,
-        contentURI: contentURI,
-        collectModule,
-        collectModuleInitData,
-        referenceModule,
-        referenceModuleInitData,
+        wallet: wallet,
         sig: {
           v,
           r,
@@ -135,5 +118,5 @@ export function useApplyForLens() {
     }
   }
 
-  return useMutation(applyForLens);
+  return useMutation(setProfile);
 }

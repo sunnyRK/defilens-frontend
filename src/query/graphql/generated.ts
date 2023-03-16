@@ -34943,6 +34943,17 @@ export type CreateMirrorViaDispatcherMutation = {
     | { __typename?: "RelayerResult"; txHash: any; txId: any };
 };
 
+export type CreateProfileMutationVariables = Exact<{
+  request: CreateProfileRequest;
+}>;
+
+export type CreateProfileMutation = {
+  __typename?: "Mutation";
+  createProfile:
+    | { __typename: "RelayError"; reason: RelayErrorReasons }
+    | { __typename: "RelayerResult"; txHash: any };
+};
+
 export type ExplorePublicationsQueryVariables = Exact<{
   request: ExplorePublicationRequest;
 }>;
@@ -56796,6 +56807,44 @@ export type RemoveReactionMutation = {
   removeReaction?: any | null;
 };
 
+export type CreateSetDefaultProfileTypedDataMutationVariables = Exact<{
+  request: CreateSetDefaultProfileRequest;
+}>;
+
+export type CreateSetDefaultProfileTypedDataMutation = {
+  __typename?: "Mutation";
+  createSetDefaultProfileTypedData: {
+    __typename?: "SetDefaultProfileBroadcastItemResult";
+    id: any;
+    expiresAt: any;
+    typedData: {
+      __typename?: "SetDefaultProfileEIP712TypedData";
+      types: {
+        __typename?: "SetDefaultProfileEIP712TypedDataTypes";
+        SetDefaultProfileWithSig: Array<{
+          __typename?: "EIP712TypedDataField";
+          name: string;
+          type: string;
+        }>;
+      };
+      domain: {
+        __typename?: "EIP712TypedDataDomain";
+        name: string;
+        chainId: any;
+        version: string;
+        verifyingContract: any;
+      };
+      value: {
+        __typename?: "SetDefaultProfileEIP712TypedDataValue";
+        nonce: any;
+        deadline: any;
+        wallet: any;
+        profileId: any;
+      };
+    };
+  };
+};
+
 export type WhoReactedPublicationQueryVariables = Exact<{
   request: WhoReactedPublicationRequest;
 }>;
@@ -57986,6 +58035,41 @@ export const useCreateMirrorViaDispatcherMutation = <
       >(CreateMirrorViaDispatcherDocument, variables)(),
     options
   );
+export const CreateProfileDocument = `
+    mutation createProfile($request: CreateProfileRequest!) {
+  createProfile(request: $request) {
+    ... on RelayerResult {
+      txHash
+    }
+    ... on RelayError {
+      reason
+    }
+    __typename
+  }
+}
+    `;
+export const useCreateProfileMutation = <TError = unknown, TContext = unknown>(
+  options?: UseMutationOptions<
+    CreateProfileMutation,
+    TError,
+    CreateProfileMutationVariables,
+    TContext
+  >
+) =>
+  useMutation<
+    CreateProfileMutation,
+    TError,
+    CreateProfileMutationVariables,
+    TContext
+  >(
+    ["createProfile"],
+    (variables?: CreateProfileMutationVariables) =>
+      fetcher<CreateProfileMutation, CreateProfileMutationVariables>(
+        CreateProfileDocument,
+        variables
+      )(),
+    options
+  );
 export const ExplorePublicationsDocument = `
     query ExplorePublications($request: ExplorePublicationRequest!) {
   explorePublications(request: $request) {
@@ -58338,6 +58422,59 @@ export const useRemoveReactionMutation = <TError = unknown, TContext = unknown>(
         RemoveReactionDocument,
         variables
       )(),
+    options
+  );
+export const CreateSetDefaultProfileTypedDataDocument = `
+    mutation createSetDefaultProfileTypedData($request: CreateSetDefaultProfileRequest!) {
+  createSetDefaultProfileTypedData(request: $request) {
+    id
+    expiresAt
+    typedData {
+      types {
+        SetDefaultProfileWithSig {
+          name
+          type
+        }
+      }
+      domain {
+        name
+        chainId
+        version
+        verifyingContract
+      }
+      value {
+        nonce
+        deadline
+        wallet
+        profileId
+      }
+    }
+  }
+}
+    `;
+export const useCreateSetDefaultProfileTypedDataMutation = <
+  TError = unknown,
+  TContext = unknown
+>(
+  options?: UseMutationOptions<
+    CreateSetDefaultProfileTypedDataMutation,
+    TError,
+    CreateSetDefaultProfileTypedDataMutationVariables,
+    TContext
+  >
+) =>
+  useMutation<
+    CreateSetDefaultProfileTypedDataMutation,
+    TError,
+    CreateSetDefaultProfileTypedDataMutationVariables,
+    TContext
+  >(
+    ["createSetDefaultProfileTypedData"],
+    (variables?: CreateSetDefaultProfileTypedDataMutationVariables) =>
+      fetcher<
+        CreateSetDefaultProfileTypedDataMutation,
+        CreateSetDefaultProfileTypedDataMutationVariables
+      >(CreateSetDefaultProfileTypedDataDocument, variables)(),
     options
   );
 export const WhoReactedPublicationDocument = `

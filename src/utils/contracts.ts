@@ -1,7 +1,7 @@
 // 1. export the contract address
 export const LENS_CONTRACT_ADDRESS =
-  "0x60Ae865ee4C725cd04353b5AAb364553f56ceF82";
-// "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d";
+  "0x60Ae865ee4C725cd04353b5AAb364553f56ceF82"; // Mumbai
+// "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d"; // Polygon
 
 // 2. export the contract abi
 export const LENS_CONTRACT_ABI = [

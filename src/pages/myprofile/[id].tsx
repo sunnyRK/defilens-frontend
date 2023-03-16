@@ -15,7 +15,6 @@ import { protocolOptions, queryKeyToMetadata } from "../../utils/utils";
 import Withdraw from "../../components/apps/aave/aaveV2Matic/Withdraw";
 import { lensCommonSchema } from "../../types";
 import useLensUser from "../../lib/auth/useLensUser";
-import BigNumber from "bignumber.js";
 import UniV2 from "../../components/apps/uniswap/Univ2";
 
 type Props = {};
@@ -25,41 +24,36 @@ export default function MyProfilePage({}: Props) {
   const [defaultURL, setDefaultURL] = useState(AAVE_V2_MATIC_SUBGRAPH);
   const [schema, setLensSchema] = useState<lensCommonSchema[]>([]);
   const [queryDocuments, setQueryDocuments] = useState(DepositsDocument);
-  const { isSignedInQuery, profileQuery } = useLensUser();
   const router = useRouter();
   const address = useAddress();
   const { id } = router.query;
 
-  useEffect(() => {
-
-  }, [])
+  useEffect(() => {}, []);
 
   const {
     isLoading,
     isError,
     data: useQueryData,
     error,
-  } = 
-  defaultKey == "uni_swap_v3_eth"
+  } = defaultKey == "uni_swap_v3_eth"
     ? useQueryHookForUniV3({
         query: queryDocuments,
         queryKey: defaultKey,
         apiUrl: defaultURL,
         user: address?.toString(),
       })
-    : 
-    useQueryHook({
+    : useQueryHook({
         query: queryDocuments,
         queryKey: defaultKey,
         apiUrl: defaultURL,
         user: address?.toString(),
       });
 
-  console.log(
-    "useQueryData-: ",
-    useQueryData,
-    BigNumber(profileQuery.data?.defaultProfile?.id).toNumber()
-  );
+  // console.log(
+  //   "useQueryData-: ",
+  //   useQueryData,
+  //   BigNumber(profileQuery.data?.defaultProfile?.id).toNumber()
+  // );
 
   const {
     isLoading: loadingProfile,
@@ -75,7 +69,6 @@ export default function MyProfilePage({}: Props) {
       enabled: !!id,
     }
   );
-  console.log("profileQuery", profileQuery);
 
   if (loadingProfile) {
     return <div>Loading profile...</div>;
@@ -88,12 +81,12 @@ export default function MyProfilePage({}: Props) {
   };
 
   const getComponent = (data: any, index: any) => {
-    console.log("queryKeyToMetadata[defaultKey].key1==");
-    console.log(
-      "queryKeyToMetadata[defaultKey].key==",
-      queryKeyToMetadata[defaultKey].key
-    );
-    console.log("queryKeyToMetadata[defaultKey].key==data", data);
+    // console.log("queryKeyToMetadata[defaultKey].key1==");
+    // console.log(
+    //   "queryKeyToMetadata[defaultKey].key==",
+    //   queryKeyToMetadata[defaultKey].key
+    // );
+    // console.log("queryKeyToMetadata[defaultKey].key==data", data);
 
     if (queryKeyToMetadata[defaultKey].key == "AAVE_V2_DEPOSIT_MATIC") {
       return (
@@ -180,18 +173,18 @@ export default function MyProfilePage({}: Props) {
           {isLoading ? (
             <div>Loading Publications...</div>
           ) : (
-            
             <Grid container columns={3}>
               {
                 // Iterate over the items in the publications array
                 // @ts-ignore
-                useQueryData && useQueryData[Object.keys(useQueryData)[0]].map(
+                useQueryData &&
+                  useQueryData[Object.keys(useQueryData)[0]].map(
                     (data: any, index: any) => getComponent(data, index)
                   )
               }
             </Grid>
             // <>
-            //   { 
+            //   {
             //     useQueryData &&useQueryData[Object.keys(useQueryData)[0]].map(
             //         (data: any, index: any) => getComponent(data, index)
             //     )

@@ -7,9 +7,11 @@ import { ThirdwebProvider } from "@thirdweb-dev/react";
 // import Header from "../components/common/Header";
 import NewSideBar from "../components/common/NewSideBar";
 import { chainId } from "../utils/constants";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 export default function App({ Component, pageProps }: AppProps) {
+  // const address = useAddress();
+
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -20,7 +22,6 @@ export default function App({ Component, pageProps }: AppProps) {
   });
 
   return (
-    <>
       <ThirdwebProvider desiredChainId={chainId}>
         <QueryClientProvider client={queryClient}>
           <NewSideBar>
@@ -40,6 +41,5 @@ export default function App({ Component, pageProps }: AppProps) {
           />
         </QueryClientProvider>
       </ThirdwebProvider>
-    </>
   );
 }

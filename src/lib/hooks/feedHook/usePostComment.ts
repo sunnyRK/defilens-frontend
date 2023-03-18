@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { useSDK, useStorageUpload } from "@thirdweb-dev/react";
+import { useSDK, useSigner, useStorageUpload } from "@thirdweb-dev/react";
 import {
   PublicationMainFocus,
   useCreateCommentTypedDataMutation,
@@ -17,12 +17,14 @@ import {
 import useLogin from "../../auth/useLogin";
 import { CreateComment } from "../../../types";
 import { pollUntilIndexed } from "../../indexing/tx_index";
+import { ethers } from "ethers";
 
 export function useCreateComment() {
   const { mutateAsync: requestTypedData } = useCreateCommentTypedDataMutation();
   const { mutateAsync: uploadToIpfs } = useStorageUpload();
   const { profileQuery } = useLensUser();
   const sdk = useSDK();
+  const signer = useSigner();
   const { mutateAsync: loginUser } = useLogin();
 
   async function createComment(commentData: CreateComment) {
@@ -90,11 +92,13 @@ export function useCreateComment() {
       value
     );
     const { v, r, s } = splitSignature(signature.signature);
-    // // 3. Use the signed typed data to send the transaction to the smart contract
-    const lensHubContract = await sdk.getContractFromAbi(
+
+    const lensHubContract = new ethers.Contract(
       LENS_CONTRACT_ADDRESS,
-      LENS_CONTRACT_ABI
+      LENS_CONTRACT_ABI,
+      signer
     );
+
     // Destructure the stuff we need out of the typedData.value field
     const {
       collectModule,
@@ -109,7 +113,7 @@ export function useCreateComment() {
       referenceModuleInitData,
     } = typedData.createCommentTypedData.typedData.value;
 
-    const tx = await lensHubContract.call("commentWithSig", {
+    const tx = await lensHubContract.commentWithSig({
       profileId,
       contentURI,
       profileIdPointed,
@@ -126,10 +130,53 @@ export function useCreateComment() {
         deadline,
       },
     });
-    console.log("create Comment: tx hash", tx, tx.receipt.transactionHash);
-    const indexedResult = await pollUntilIndexed({
-      txHash: tx.receipt.transactionHash,
-    });
+    console.log("create post: tx hash", tx, tx.hash);
+    await tx.wait();
+    console.log("create post: poll until indexed");
+    const indexedResult = await pollUntilIndexed({ txHash: tx.hash });
+
+    console.log("create post: profile has been indexed", indexedResult);
+
+    // // // 3. Use the signed typed data to send the transaction to the smart contract
+    // const lensHubContract = await sdk.getContractFromAbi(
+    //   LENS_CONTRACT_ADDRESS,
+    //   LENS_CONTRACT_ABI
+    // );
+    // // Destructure the stuff we need out of the typedData.value field
+    // const {
+    //   collectModule,
+    //   collectModuleInitData,
+    //   contentURI,
+    //   profileIdPointed,
+    //   pubIdPointed,
+    //   referenceModuleData,
+    //   deadline,
+    //   profileId,
+    //   referenceModule,
+    //   referenceModuleInitData,
+    // } = typedData.createCommentTypedData.typedData.value;
+
+    // const tx = await lensHubContract.call("commentWithSig", {
+      // profileId,
+      // contentURI,
+      // profileIdPointed,
+      // pubIdPointed,
+      // referenceModuleData,
+      // collectModule,
+      // collectModuleInitData,
+      // referenceModule,
+      // referenceModuleInitData,
+      // sig: {
+      //   v,
+      //   r,
+      //   s,
+      //   deadline,
+      // },
+    // });
+    // console.log("create Comment: tx hash", tx, tx.receipt.transactionHash);
+    // const indexedResult = await pollUntilIndexed({
+    //   txHash: tx.receipt.transactionHash,
+    // });
   }
 
   return useMutation(createComment);

@@ -24,7 +24,7 @@ export default function useLensUser() {
       enabled: !!address,
     }
   );
-
+  
   return {
     // Contains information about both the local storage
     // AND the information about the lens profile

@@ -1,15 +1,30 @@
+const STORAGE_KEY = "LH_STORAGE_KEY";
+
 export function isTokenExpired() {
-  const accessToken = localStorage.getItem("accessToken");
-  if (!accessToken || accessToken === "undefined") {
+  const ls = localStorage || window.localStorage;
+  if (!ls) {
+    throw new Error("LocalStorage is not available");
+  }
+  const authenticationData = ls.getItem(STORAGE_KEY);
+  if (!authenticationData) return true;
+  const parseAuthenticationData = JSON.parse(authenticationData) as {
+    accessToken: string;
+    refreshToken: string;
+    address: string;
+    exp: number;
+  };
+  // console.log("isTokenExpired-Date.now()", Date.now(), parseAuthenticationData.exp);
+  // console.log("isTokenExpired-exp * 1000", parseJwt(parseAuthenticationData.accessToken)?.exp * 1000);
+  // console.log("isTokenExpired-diffff+++",
+  //     parseJwt(parseAuthenticationData.accessToken)?.exp * 1000 - Date.now(),
+  //     (parseJwt(parseAuthenticationData.accessToken)?.exp * 1000 - Date.now())/60000
+  // );
+
+  if (!parseJwt(parseAuthenticationData.accessToken)?.exp) {
     return true;
   }
-  console.log("isTokenExpired-Date.now()", Date.now());
-  console.log("isTokenExpired-exp * 1000", parseJwt(accessToken)?.exp * 1000);
-  console.log("isTokenExpired-diffff+++",
-    parseJwt(accessToken)?.exp * 1000 - Date.now(),
-    (parseJwt(accessToken)?.exp * 1000 - Date.now())/60000
-  );
-  if (Date.now() <= parseJwt(accessToken)?.exp * 1000) {
+
+  if (Date.now() <= parseJwt(parseAuthenticationData.accessToken)?.exp * 1000) {
     return false;
   }
   return true;
@@ -22,25 +37,29 @@ export function readAccessToken() {
   if (!ls) {
     throw new Error("LocalStorage is not available");
   }
-  const accessToken: any = localStorage.getItem("accessToken");
-  const refreshToken: any = localStorage.getItem("refreshToken");
-  const exp: any = parseJwt(accessToken)?.exp * 1000;
-  const data = JSON.stringify({ accessToken, refreshToken, exp });
-  return JSON.parse(data) as {
+  const authenticationData = ls.getItem(STORAGE_KEY);
+  if (!authenticationData) return null;
+
+  return JSON.parse(authenticationData) as {
     accessToken: string;
     refreshToken: string;
+    address: string;
     exp: number;
   };
 }
 
 // 2. Setting the  access token in storage
-export function setAccessToken(accessToken: string, refreshToken: string) {
+export function setAccessToken(accessToken: string, refreshToken: string, address: string) {
   const ls = localStorage || window.localStorage;
   if (!ls) {
     throw new Error("LocalStorage is not available");
   }
   ls.setItem("accessToken", accessToken);
   ls.setItem("refreshToken", refreshToken);
+  ls.setItem("address", address);
+  const exp: any = parseJwt(accessToken)?.exp;
+  ls.setItem(STORAGE_KEY, JSON.stringify({ accessToken, refreshToken, address, exp }));
+
 }
 
 // 3. Parse the JWT token that comes back and extract the exp date field

@@ -21,11 +21,11 @@ export const fetcher = <TData, TVariables>(
       const newToken = await refreshAccessToken();
       if (!newToken) return null;
       accessToken = newToken;
-      const ls = localStorage || window.localStorage;
-      if (!ls) {
-        throw new Error("LocalStorage is not available");
-      }
-      ls.setItem("accessToken", accessToken);
+      // const ls = localStorage || window.localStorage;
+      // if (!ls) {
+      //   throw new Error("LocalStorage is not available");
+      // }
+      // ls.setItem("accessToken", accessToken);
     }
 
     // Finally, return the token

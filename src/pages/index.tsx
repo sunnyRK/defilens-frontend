@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NewsFeed from "../components/feed/NewsFeed";
 import {
   PublicationTypes,
@@ -12,51 +12,50 @@ import {
 import styles from "../styles/Home.module.css";
 import { formatDate, formatUrl, Network } from "../utils/helper";
 import { Accordion, Icon, Message, Comment, Button } from "semantic-ui-react";
-import InfiniteScroll from "react-infinite-scroll-component";
 import useLensUser from "../lib/auth/useLensUser";
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const { isSignedInQuery, profileQuery } = useLensUser();
 
-  const request = {
-    sortCriteria: PublicationSortCriteria.Latest,
-    publicationTypes: [PublicationTypes.Post],
-    sources: ["defilens-demo-3"],
-    limit: 50,
-  };
+  // const request = {
+  //   sortCriteria: PublicationSortCriteria.Latest,
+  //   publicationTypes: [PublicationTypes.Post],
+  //   sources: ["defilens-demo-3"],
+  //   limit: 50,
+  // };
 
-  const { isLoading, error, data, fetchStatus } =
-    useExplorePublicationsQuery(
-      {
-        request,
-      },
-      {
-        // Don't refetch the user comes back
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-      }
-    );
-  console.log("data", data, fetchStatus);
+  // const { isLoading, error, data, fetchStatus } =
+  //   useExplorePublicationsQuery(
+  //     {
+  //       request,
+  //     },
+  //     {
+  //       // Don't refetch the user comes back
+  //       refetchOnWindowFocus: false,
+  //       refetchOnReconnect: false,
+  //     }
+  //   );
+  // console.log("data", data, fetchStatus);
 
-  // const {
-  //   isLoading,
-  //   error,
-  //   data: data,
-  // } = usePublicationsQuery({
-  //   request: {
-  //     profileIds: profileQuery.data?.defaultProfile?.id,
-  //     publicationTypes: [PublicationTypes.Post],
-  //     limit: 10,
-  //     sources: ["defilens-demo-3"],
-  //     // metadata: {
-  //     //   tags: {
-  //     //     oneOf: ["check_deposit", "check_deposit2"],
-  //     //   },
-  //     // },
-  //   },
-  // });
-  // console.log("data", data);
+  const {
+    isLoading,
+    error,
+    data: data,
+  } = usePublicationsQuery({
+    request: {
+      profileIds: profileQuery.data?.defaultProfile?.id,
+      publicationTypes: [PublicationTypes.Post],
+      limit: 10,
+      sources: ["defilens-demo-3"],
+      // metadata: {
+      //   tags: {
+      //     oneOf: ["check_deposit", "check_deposit2"],
+      //   },
+      // },
+    },
+  });
+  console.log("data", data);
 
   if (error) {
     return <div className={styles.container}>Error...</div>;
@@ -65,6 +64,7 @@ export default function Home() {
   if (isLoading) {
     return <div className={styles.container}>Loading...</div>;
   }
+
 
   const handleClick = (e: any, index: any) => {
     const newIndex = activeIndex === index ? -1 : index;
@@ -83,7 +83,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <div className={styles.postsContainer}>
-        {data?.explorePublications.items.map((publication, index) => (
+        {data?.publications.items.map((publication, index) => (
           <Accordion styled key={index} style={{ margin: "20px" }}>
             <Accordion.Title
               active={activeIndex === index}
@@ -133,7 +133,7 @@ export default function Home() {
                         {/* AppName */}
                         {publication.metadata.attributes[2] &&
                           publication.metadata.attributes[2].value}
-                        {"-"}
+                        {/* {"-"} */}
                         {/* Version   */}
                         {publication.metadata.attributes[3] &&
                           publication.metadata.attributes[3].value}{" "}

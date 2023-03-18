@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid, Icon, Menu, Segment, Sidebar } from "semantic-ui-react";
 import styles from "../../styles/Header.module.css";
 import useLensUser from "../../lib/auth/useLensUser";
 import SignInButton from "../../components/common/SignInButton";
 import Link from "next/link";
+import { useAddress, useDisconnect } from "@thirdweb-dev/react";
 
 type Props = {
   children: JSX.Element;
@@ -12,6 +13,32 @@ type Props = {
 export default function NewSideBar({ children }: Props) {
   const [visible, setVisible] = React.useState(false);
   const { isSignedInQuery, profileQuery } = useLensUser();
+  const address = useAddress();
+  const disConnect = useDisconnect();
+
+  useEffect(() => {
+    if (address) {
+     const ls = localStorage || window.localStorage;
+     if (!ls) {
+       throw new Error("LocalStorage is not available");
+     }
+     const data = ls.getItem("LH_STORAGE_KEY");
+     if (data) {
+       const data2 = JSON.parse(data) as {
+         accessToken: string;
+         refreshToken: string;
+         address: string;
+         exp: number;
+       };
+ 
+       if (data2.address != undefined && data2.address != address) {
+         console.log('NewSideBar-remove');
+         ls.removeItem('LH_STORAGE_KEY');
+         disConnect();
+       }
+     }
+   }
+   }, [address])
 
   return (
     <>

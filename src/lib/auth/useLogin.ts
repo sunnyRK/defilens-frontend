@@ -37,7 +37,7 @@ export default function useLogin() {
     // 5. Store the access token inside local storage so we can use it.
     const { accessToken, refreshToken } = authenticate;
 
-    setAccessToken(accessToken, refreshToken);
+    setAccessToken(accessToken, refreshToken, address);
 
     // Now, let's ask react query to refetch the cache key
     // Refetch this cache key:  ["lens-user", address],

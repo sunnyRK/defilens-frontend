@@ -38,13 +38,12 @@ export default function SignInButton({}: Props) {
   }
 
   if (isTokenExpired()) {
-    console.log("time Expired ++++");
-    return <button onClick={() => requestLogin()}>Sign in with Lens1</button>;
+    return <button onClick={() => requestLogin()}>Sign in with Lens</button>;
   }
 
   // If the user is not signed in, we need to request a login
   if (!isSignedInQuery.data) {
-    return <button onClick={() => requestLogin()}>Sign in with Lens2</button>;
+    return <button onClick={() => requestLogin()}>Sign in with Lens</button>;
   }
 
   // Loading their profile information

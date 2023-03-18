@@ -8,7 +8,6 @@ import { Button, Card } from "semantic-ui-react";
 import { getAmount, getERC20Details, Network } from "../../../../utils/helper";
 import { toast } from "react-toastify";
 import { useApplyForLens } from "../../../../lib/hooks/profileHook/useApplyForLens";
-import { isTokenExpired, readAccessToken } from "../../../../lib/auth/helpers";
 
 export default function Deposit({
   deposit,
@@ -18,7 +17,6 @@ export default function Deposit({
   const { mutateAsync: applyForLens_AA } = useApplyForLens_AA();
   const { mutateAsync: applyForLens } = useApplyForLens();
   const { isSignedInQuery, profileQuery } = useLensUser();
-  const { mutate: requestLogin } = useLogin();
   const [postLoading, setPostLoading] = useState(false);
   // console.log("deposit:", deposit);
 
@@ -244,9 +242,9 @@ export default function Deposit({
                   attributes: attributes,
                 };
                 attributes?.length > 0
-                  ? await applyForLens_AA(commonSchema)
-                  : // await applyForLens(commonSchema)
-                    alert("Wait");
+                  // ? await applyForLens_AA(commonSchema)
+                  ? await applyForLens(commonSchema)
+                    : alert("Wait");
                 setPostLoading(false);
                 toast.success(`Posted successfully.`);
               } catch (error) {

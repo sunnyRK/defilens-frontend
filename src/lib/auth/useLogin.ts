@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAddress, useSDK } from "@thirdweb-dev/react";
 import { useAuthenticateMutation } from "../../query/graphql/generated";
+import { useAppStore } from "../../store/appStore";
 import generateChallenge from "./generateChallenge";
 import { isTokenExpired, setAccessToken } from "./helpers";
 
@@ -9,6 +10,7 @@ export default function useLogin() {
   const sdk = useSDK();
   const { mutateAsync: sendSignedMessage } = useAuthenticateMutation();
   const client = useQueryClient();
+  const setAccessTokenBool = useAppStore((state) => state.setAccessToken);
 
   // 1. Write the actual async function
   async function login() {
@@ -38,7 +40,7 @@ export default function useLogin() {
     const { accessToken, refreshToken } = authenticate;
 
     setAccessToken(accessToken, refreshToken, address);
-
+    setAccessTokenBool(true);
     // Now, let's ask react query to refetch the cache key
     // Refetch this cache key:  ["lens-user", address],
     client.invalidateQueries(["lens-user", address]);

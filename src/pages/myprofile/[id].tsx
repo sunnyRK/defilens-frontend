@@ -90,48 +90,48 @@ export default function MyProfilePage({}: Props) {
 
     if (queryKeyToMetadata[defaultKey].key == "AAVE_V2_DEPOSIT_MATIC") {
       return (
-          <Grid.Column key={index}>
-            <Card.Group doubling stackable centered>
-              {/* @ts-ignore */}
-              <Deposit
-                deposit={data}
-                queryKeyToMetadata={queryKeyToMetadata[defaultKey]}
-                defaultKey={defaultKey}
-                key={data.id}
-              />
-            </Card.Group>
-          </Grid.Column>
+        <Grid.Column key={index}>
+          <Card.Group doubling stackable centered>
+            {/* @ts-ignore */}
+            <Deposit
+              deposit={data}
+              queryKeyToMetadata={queryKeyToMetadata[defaultKey]}
+              defaultKey={defaultKey}
+              key={data.id}
+            />
+          </Card.Group>
+        </Grid.Column>
       );
     } else if (queryKeyToMetadata[defaultKey].key == "AAVE_V2_WITHDRAW_MATIC") {
       return (
-          <Grid.Column key={index}>
-            <Card.Group doubling stackable centered>
-              {/* @ts-ignore */}
-              <Withdraw
-                withdraw={data}
-                queryKeyToMetadata={queryKeyToMetadata[defaultKey]}
-                defaultKey={defaultKey}
-                key={data.id}
-              />
-            </Card.Group>
-          </Grid.Column>
+        <Grid.Column key={index}>
+          <Card.Group doubling stackable centered>
+            {/* @ts-ignore */}
+            <Withdraw
+              withdraw={data}
+              queryKeyToMetadata={queryKeyToMetadata[defaultKey]}
+              defaultKey={defaultKey}
+              key={data.id}
+            />
+          </Card.Group>
+        </Grid.Column>
       );
     } else if (
       queryKeyToMetadata[defaultKey].key == "UNISWAP_V3_SWAP_ETHEREUM"
     ) {
       return (
-          <Grid.Column key={index}>
-            <Card.Group doubling stackable centered>
-              {/* @ts-ignore */}
+        <Grid.Column key={index}>
+          <Card.Group doubling stackable centered>
+            {/* @ts-ignore */}
 
-              <UniV2
-                swap={data}
-                queryKeyToMetadata={queryKeyToMetadata[defaultKey]}
-                defaultKey={defaultKey}
-                key={data.id}
-              />
-            </Card.Group>
-          </Grid.Column>
+            <UniV2
+              swap={data}
+              queryKeyToMetadata={queryKeyToMetadata[defaultKey]}
+              defaultKey={defaultKey}
+              key={data.id}
+            />
+          </Card.Group>
+        </Grid.Column>
       );
     }
   };
@@ -168,7 +168,8 @@ export default function MyProfilePage({}: Props) {
               {
                 // Iterate over the items in the publications array
                 // @ts-ignore
-                useQueryData && useQueryData[Object.keys(useQueryData)[0]].map(
+                useQueryData &&
+                  useQueryData[Object.keys(useQueryData)[0]].map(
                     (data: any, index: any) => getComponent(data, index)
                   )
               }

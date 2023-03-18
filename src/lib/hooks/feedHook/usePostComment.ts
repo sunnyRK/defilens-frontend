@@ -157,21 +157,21 @@ export function useCreateComment() {
     // } = typedData.createCommentTypedData.typedData.value;
 
     // const tx = await lensHubContract.call("commentWithSig", {
-      // profileId,
-      // contentURI,
-      // profileIdPointed,
-      // pubIdPointed,
-      // referenceModuleData,
-      // collectModule,
-      // collectModuleInitData,
-      // referenceModule,
-      // referenceModuleInitData,
-      // sig: {
-      //   v,
-      //   r,
-      //   s,
-      //   deadline,
-      // },
+    // profileId,
+    // contentURI,
+    // profileIdPointed,
+    // pubIdPointed,
+    // referenceModuleData,
+    // collectModule,
+    // collectModuleInitData,
+    // referenceModule,
+    // referenceModuleInitData,
+    // sig: {
+    //   v,
+    //   r,
+    //   s,
+    //   deadline,
+    // },
     // });
     // console.log("create Comment: tx hash", tx, tx.receipt.transactionHash);
     // const indexedResult = await pollUntilIndexed({

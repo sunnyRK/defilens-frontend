@@ -65,7 +65,6 @@ export default function Home() {
     return <div className={styles.container}>Loading...</div>;
   }
 
-
   const handleClick = (e: any, index: any) => {
     const newIndex = activeIndex === index ? -1 : index;
     setActiveIndex(newIndex);

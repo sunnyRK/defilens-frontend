@@ -242,9 +242,9 @@ export default function Deposit({
                   attributes: attributes,
                 };
                 attributes?.length > 0
-                  // ? await applyForLens_AA(commonSchema)
-                  ? await applyForLens(commonSchema)
-                    : alert("Wait");
+                  ? // ? await applyForLens_AA(commonSchema)
+                    await applyForLens(commonSchema)
+                  : alert("Wait");
                 setPostLoading(false);
                 toast.success(`Posted successfully.`);
               } catch (error) {

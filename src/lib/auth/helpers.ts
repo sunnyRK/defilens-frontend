@@ -13,12 +13,21 @@ export function isTokenExpired() {
     address: string;
     exp: number;
   };
-  // console.log("isTokenExpired-Date.now()", Date.now(), parseAuthenticationData.exp);
-  // console.log("isTokenExpired-exp * 1000", parseJwt(parseAuthenticationData.accessToken)?.exp * 1000);
-  // console.log("isTokenExpired-diffff+++",
-  //     parseJwt(parseAuthenticationData.accessToken)?.exp * 1000 - Date.now(),
-  //     (parseJwt(parseAuthenticationData.accessToken)?.exp * 1000 - Date.now())/60000
-  // );
+  console.log(
+    "isTokenExpired-Date.now()",
+    Date.now(),
+    parseAuthenticationData.exp
+  );
+  console.log(
+    "isTokenExpired-exp * 1000",
+    parseJwt(parseAuthenticationData.accessToken)?.exp * 1000
+  );
+  console.log(
+    "isTokenExpired-diffff+++",
+    parseJwt(parseAuthenticationData.accessToken)?.exp * 1000 - Date.now(),
+    (parseJwt(parseAuthenticationData.accessToken)?.exp * 1000 - Date.now()) /
+      60000
+  );
 
   if (!parseJwt(parseAuthenticationData.accessToken)?.exp) {
     return true;
@@ -49,7 +58,11 @@ export function readAccessToken() {
 }
 
 // 2. Setting the  access token in storage
-export function setAccessToken(accessToken: string, refreshToken: string, address: string) {
+export async function setAccessToken(
+  accessToken: string,
+  refreshToken: string,
+  address: string
+) {
   const ls = localStorage || window.localStorage;
   if (!ls) {
     throw new Error("LocalStorage is not available");
@@ -58,8 +71,10 @@ export function setAccessToken(accessToken: string, refreshToken: string, addres
   ls.setItem("refreshToken", refreshToken);
   ls.setItem("address", address);
   const exp: any = parseJwt(accessToken)?.exp;
-  ls.setItem(STORAGE_KEY, JSON.stringify({ accessToken, refreshToken, address, exp }));
-
+  ls.setItem(
+    STORAGE_KEY,
+    JSON.stringify({ accessToken, refreshToken, address, exp })
+  );
 }
 
 // 3. Parse the JWT token that comes back and extract the exp date field

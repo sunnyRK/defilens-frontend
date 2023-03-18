@@ -22,24 +22,24 @@ export default function App({ Component, pageProps }: AppProps) {
   });
 
   return (
-      <ThirdwebProvider desiredChainId={chainId}>
-        <QueryClientProvider client={queryClient}>
-          <NewSideBar>
-            <Component {...pageProps} />
-          </NewSideBar>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-        </QueryClientProvider>
-      </ThirdwebProvider>
+    <ThirdwebProvider desiredChainId={chainId}>
+      <QueryClientProvider client={queryClient}>
+        <NewSideBar>
+          <Component {...pageProps} />
+        </NewSideBar>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+      </QueryClientProvider>
+    </ThirdwebProvider>
   );
 }

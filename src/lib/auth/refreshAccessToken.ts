@@ -5,10 +5,8 @@ import {
 } from "../../query/graphql/generated";
 import { readAccessToken, setAccessToken } from "./helpers";
 import { API_URL } from "../../utils/constants";
-import { useAddress } from "@thirdweb-dev/react";
 
-export default async function refreshAccessToken() {
-  const address = await useAddress();
+export default async function refreshAccessToken(address: string) {
   // 1. Get our current refresh token from local storage
   const currentRefreshToken = readAccessToken()?.refreshToken;
 

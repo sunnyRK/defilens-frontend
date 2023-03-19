@@ -19,44 +19,44 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const { isSignedInQuery, profileQuery } = useLensUser();
 
-  // const request = {
-  //   sortCriteria: PublicationSortCriteria.Latest,
-  //   publicationTypes: [PublicationTypes.Post],
-  //   sources: ["defilens-demo-3"],
-  //   limit: 50,
-  // };
+  const request = {
+    sortCriteria: PublicationSortCriteria.Latest,
+    publicationTypes: [PublicationTypes.Post],
+    sources: ["defilens-demo-3"],
+    limit: 50,
+  };
 
-  // const { isLoading, error, data, fetchStatus } =
-  //   useExplorePublicationsQuery(
-  //     {
-  //       request,
-  //     },
-  //     {
-  //       // Don't refetch the user comes back
-  //       refetchOnWindowFocus: false,
-  //       refetchOnReconnect: false,
-  //     }
-  //   );
-  // console.log("data", data, fetchStatus);
+  const { isLoading, error, data, fetchStatus } =
+    useExplorePublicationsQuery(
+      {
+        request,
+      },
+      {
+        // Don't refetch the user comes back
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+      }
+    );
+  console.log("data", data, fetchStatus);
 
-  const {
-    isLoading,
-    error,
-    data: data,
-  } = usePublicationsQuery({
-    request: {
-      profileIds: profileQuery.data?.defaultProfile?.id,
-      publicationTypes: [PublicationTypes.Post],
-      limit: 10,
-      sources: ["defilens-demo-3"],
-      // metadata: {
-      //   tags: {
-      //     oneOf: ["check_deposit", "check_deposit2"],
-      //   },
-      // },
-    },
-  });
-  console.log("data", data);
+  // const {
+  //   isLoading,
+  //   error,
+  //   data: data,
+  // } = usePublicationsQuery({
+  //   request: {
+  //     profileIds: profileQuery.data?.defaultProfile?.id,
+  //     publicationTypes: [PublicationTypes.Post],
+  //     limit: 10,
+  //     sources: ["defilens-demo-3"],
+  //     // metadata: {
+  //     //   tags: {
+  //     //     oneOf: ["check_deposit", "check_deposit2"],
+  //     //   },
+  //     // },
+  //   },
+  // });
+  // console.log("data", data);
 
   if (error) {
     return <div className={styles.container}>Error...</div>;
@@ -87,7 +87,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <div className={styles.postsContainer}>
-        {data?.publications.items.map((publication, index) => (
+        {data?.explorePublications.items.map((publication, index) => (
           <Accordion styled key={index} style={{ margin: "20px" }}>
             <Accordion.Title
               active={activeIndex === index}

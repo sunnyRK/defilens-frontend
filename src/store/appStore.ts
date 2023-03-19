@@ -1,20 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
-// const appDataStore = (set: any) => ({
-//     isAccessToken: false,
-//     setAccessToken: (accessToken: string) => {
-//         set((state: any) => ({
-//             isAccessToken: true,
-//         }))
-//     },
-//     removeAccessToken: (accessToken: string) => {
-//         set((state: any) => ({
-//             isAccessToken: false,
-//         }))
-//     },
-// })
-
 interface AppState {
   isAccessToken: boolean;
   setAccessToken: (isAccessToken: boolean) => void;

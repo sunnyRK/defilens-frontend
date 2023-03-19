@@ -27,10 +27,10 @@ import zapIn_deposit_abi from "../apps/aave/aaveV2Matic/abis/zapIn_deposit.json"
 import { ZapIn_AAVE_V2_Deposit_Matic } from "../apps/aave/aaveV2Matic/helpers/constants";
 import { getProvider } from "../../utils/helper";
 import { getEvent, getContractByTxHash } from "../../lib/events";
-import { getDsa } from "../../lib/dsa/dsa";
+// import { getDsa } from "../../lib/dsa/dsa";
 import { useAddress, useSDK, useSigner } from "@thirdweb-dev/react";
 import { add } from "lodash";
-import { getMethodDataFromTx, getNewEvent } from "../../lib/demo_events";
+// import { getMethodDataFromTx, getNewEvent } from "../../lib/demo_events";
 import web3 from "web3";
 import { ethers } from "ethers";
 
@@ -172,13 +172,13 @@ export default function NewsFeed({ publication }: Props) {
         //   "polygon",
         //   txHash,
         // );
-        await getMethodDataFromTx(signer);
+        // await getMethodDataFromTx(signer);
       } else if (network == Network.ETHEREUM_MAINNET) {
         console.log("event-network-2", network);
-        await getNewEvent("mainnet", txHash);
+        // await getNewEvent("mainnet", txHash);
       } else if (network == Network.OPTIMISM_MAINNET) {
         console.log("event-network-3", network);
-        await getNewEvent("optimism", txHash);
+        // await getNewEvent("optimism", txHash);
       }
     } catch (error) {
       console.log("handleCopyTrade-error", error);

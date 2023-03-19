@@ -168,8 +168,7 @@ export default function MyProfilePage({}: Props) {
               {
                 // Iterate over the items in the publications array
                 // @ts-ignore
-                useQueryData &&
-                  useQueryData[Object.keys(useQueryData)[0]].map(
+                useQueryData && useQueryData[Object.keys(useQueryData)[0]].map(
                     (data: any, index: any) => getComponent(data, index)
                   )
               }

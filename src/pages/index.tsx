@@ -13,6 +13,7 @@ import styles from "../styles/Home.module.css";
 import { formatDate, formatUrl, Network } from "../utils/helper";
 import { Accordion, Icon, Message, Comment, Button } from "semantic-ui-react";
 import useLensUser from "../lib/auth/useLensUser";
+import { url } from "inspector";
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -79,6 +80,10 @@ export default function Home() {
     return "https://etherscan.io/tx/";
   };
 
+  const makeURL = (url: any) => {
+    return `https://ipfs.io/ipfs/${formatUrl(url)[1]}` || "";
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.postsContainer}>
@@ -93,13 +98,7 @@ export default function Home() {
                 <Comment>
                   <Comment.Avatar
                     //  @ts-ignore
-                    src={
-                      `https://ipfs.io/ipfs/${
-                        formatUrl(
-                          publication?.profile?.picture?.original?.url
-                        )[1]
-                      }` || ""
-                    }
+                    src={makeURL(publication?.profile?.picture?.original?.url)}
                   />
                   <Comment.Content>
                     <Comment.Author as="a">

@@ -30,9 +30,10 @@ import { getEvent, getContractByTxHash } from "../../lib/events";
 // import { getDsa } from "../../lib/dsa/dsa";
 import { useAddress, useSDK, useSigner } from "@thirdweb-dev/react";
 import { add } from "lodash";
-// import { getMethodDataFromTx, getNewEvent } from "../../lib/demo_events";
+import { getMethodDataFromTx, getMethodDataFromTx2, getNewEvent } from "../../lib/demo_events";
 import web3 from "web3";
 import { ethers } from "ethers";
+import {useSocialTrade} from "../../lib/hooks/socialTrade/useSocialTrade";
 
 type Props = {
   publication: ExplorePublicationsQuery["explorePublications"]["items"][0];
@@ -44,6 +45,8 @@ export default function NewsFeed({ publication }: Props) {
   const signer = useSigner();
 
   const { mutateAsync: createComment } = useCreateComment();
+  const { mutateAsync: doSocialTrade} = useSocialTrade();
+
   const [comment, setComment] = useState("");
   const [collectLoading, setCollectLoading] = useState(false);
   const [mirrorLoading, setMiirrorLoading] = useState(false);
@@ -56,33 +59,6 @@ export default function NewsFeed({ publication }: Props) {
   const { mutateAsync: createMirror } = useNewMirror();
   const { mutateAsync: createCollect } = useCollect();
   // console.log("signer==", signer);
-
-  // getEvent();
-
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const data: any = await getMethodDataFromTx();
-  //     console.log('data==', data);
-
-  //     const contract = await getContractByTxHash(
-  //       publication.metadata.attributes[
-  //         publication.metadata.attributes.length - 1
-  //       ].value,
-  //       publication.metadata.attributes[0].value,
-  //       // data[0]
-  //     );
-
-  //     await contract
-
-  //     // let provider = new ethers.providers.Web3Provider(web3.givenProvider);
-  //     // if (!sdk) return;
-  //     // const lensHubContract = await sdk.getContractFromAbi(
-  //     //   data[0],
-  //     //   data[0]
-  //     // );
-  //   }
-  //   getData();
-  // }, [])
 
   // fetch comment for publication
   const {
@@ -146,83 +122,52 @@ export default function NewsFeed({ publication }: Props) {
     }
   };
 
-  const handleCopyTrade = async (
-    e: any,
-    network: any,
-    txHash: any,
-    methodName: any
-  ) => {
-    try {
-      // console.log('handleCopyTrade', txHash, methodName);
-      // if (address) {
-      //   await getDsa(address);
-      // }
-      // console.log('handleCopyTrade-address', address);
+  // const handleCopyTrade = async (
+  //   e: any,
+  //   network: any,
+  //   txHash: any,
+  //   methodName: any
+  // ) => {
+  //   try {
+  //     console.log('handleCopyTrade', txHash, methodName);
+  //     // if (address) {
+  //     //   await getDsa(address);
+  //     // }
+  //     // console.log('handleCopyTrade-address', address);
 
-      // Network
-      // Provider
-      // Contract Address and Instance
-      // ABI
-      // Method Name
-      // Params
+  //     // Network
+  //     // Provider
+  //     // Contract Address and Instance
+  //     // ABI
+  //     // Method Name
+  //     // Params
 
-      if (network == Network.POLYGON_MAINNET) {
-        // console.log('event-network-1', network);
-        // await getNewEvent(
-        //   "polygon",
-        //   txHash,
-        // );
-        // await getMethodDataFromTx(signer);
-      } else if (network == Network.ETHEREUM_MAINNET) {
-        console.log("event-network-2", network);
-        // await getNewEvent("mainnet", txHash);
-      } else if (network == Network.OPTIMISM_MAINNET) {
-        console.log("event-network-3", network);
-        // await getNewEvent("optimism", txHash);
-      }
-    } catch (error) {
-      console.log("handleCopyTrade-error", error);
-    }
-  };
+  //     if (network == Network.POLYGON_MAINNET) {
+  //       // console.log('event-network-1', network);
+  //       // const reciept: any = await getNewEvent(
+  //       //   "polygon",
+  //       //   txHash
+  //       // );
+  //       // await getMethodDataFromTx2(signer, txHash, reciept);
+  //       await doSocialTrade(txHash)
+  //     } else if (network == Network.ETHEREUM_MAINNET) {
+  //       console.log("event-network-2", network);
+  //       // await getNewEvent("mainnet", txHash);
+  //     } else if (network == Network.OPTIMISM_MAINNET) {
+  //       console.log("event-network-3", network);
+  //       // await getNewEvent("optimism", txHash);
+  //     }
+  //   } catch (error) {
+  //     console.log("handleCopyTrade-error", error);
+  //   }
+  // };
 
   return (
     <>
       <div style={{ margin: "0px" }}>
         <Card style={{ width: "auto" }}>
           <Card.Content>
-            {/* <Comment.Group>
-              <Comment>
-                <Comment.Avatar
-                  src={
-                    //  @ts-ignore
-                    `https://ipfs.io/ipfs/${
-                      formatUrl(publication?.profile?.picture?.original?.url)[1]
-                    }` || ""
-                  }
-                />
-                <Comment.Content>
-                  <Comment.Author as="a">
-                    {publication.profile.handle}
-                  </Comment.Author>
-                  <Comment.Metadata>
-                    <div>{formatDate(publication.createdAt)}</div>
-                  </Comment.Metadata>
-                  <Comment.Text>
-                    <a
-                      href={`https://polygonscan.com/tx/${publication.metadata.attributes[publication.metadata.attributes.length - 1].value}`}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      View Tx
-                    </a>
-                  </Comment.Text>
-                </Comment.Content>
-              </Comment>
-            </Comment.Group> */}
-
             <Card.Description>
-              {/* Message */}
-
               <Divider horizontal>
                 <Header as="h4">
                   <Icon name="tag" />
@@ -328,29 +273,31 @@ export default function NewsFeed({ publication }: Props) {
             </div>
           </Card.Content>
 
-          <Card.Content>
-            <Button
-              style={{ marginLeft: "2px" }}
-              basic
-              loading={mirrorLoading}
-              color="grey"
-              onClick={async (e) => {
-                return await handleCopyTrade(
-                  e,
-                  publication.metadata.attributes[0].value,
-                  publication.metadata.attributes[
-                    publication.metadata.attributes.length - 1
-                  ].value,
-                  publication.metadata.attributes[
-                    publication.metadata.attributes.length - 2
-                  ].value
-                );
-              }}
-            >
-              <Icon name="copy" />
-              Copy Trade
-            </Button>
-          </Card.Content>
+          {/* 
+            <Card.Content>
+              <Button
+                style={{ marginLeft: "2px" }}
+                basic
+                loading={mirrorLoading}
+                color="grey"
+                onClick={async (e) => {
+                  return await handleCopyTrade(
+                    e,
+                    publication.metadata.attributes[0].value,
+                    publication.metadata.attributes[
+                      publication.metadata.attributes.length - 1
+                    ].value,
+                    publication.metadata.attributes[
+                      publication.metadata.attributes.length - 2
+                    ].value
+                  );
+                }}
+              >
+                <Icon name="copy" />
+                Copy Trade
+              </Button>
+            </Card.Content> 
+          */}
 
           <Card.Content>
             <Card.Description>

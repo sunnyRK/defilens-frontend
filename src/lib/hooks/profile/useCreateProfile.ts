@@ -1,10 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { useSDK, useStorageUpload, useSigner } from "@thirdweb-dev/react";
 import {
-  CreateProfileRequest,
-  PublicationMainFocus,
-  useCreatePostTypedDataMutation,
   useCreateProfileMutation,
+} from "../../../query/graphql_testnetonly/generated";
+import {
   useCreateSetDefaultProfileTypedDataMutation,
 } from "../../../query/graphql/generated";
 import useLensUser from "../../auth/useLensUser";

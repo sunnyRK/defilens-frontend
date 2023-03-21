@@ -5,6 +5,20 @@ import { API_URL } from "./src/utils/constants";
 const config: CodegenConfig = {
   hooks: { afterAllFileWrite: ["prettier --write"] },
   generates: {
+    // "src/query/graphql_testnetonly/generated.ts": {
+    //   schema: API_URL,
+    //   plugins: [
+    //     "typescript",
+    //     "typescript-operations",
+    //     "typescript-react-query",
+    //     "fragment-matcher",
+    //   ],
+    //   documents: "src/query/graphql_testnetonly/*.graphql",
+    //   config: {
+    //     dedupeFragments: true,
+    //     fetcher: { func: "./auth-fetcher#fetcher", isReactHook: false },
+    //   },
+    // },
     "src/query/graphql/generated.ts": {
       schema: API_URL,
       plugins: [

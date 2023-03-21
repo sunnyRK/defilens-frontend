@@ -1,21 +1,21 @@
 import { ChainId } from "@thirdweb-dev/react";
 
-export const chainId = ChainId.Mumbai;
-export const API_URL = "https://api-mumbai.lens.dev/";
-// process.env.NEXT_PUBLIC_LENS_API_URL || "https://api-mumbai.lens.dev/";
+// export const chainId = ChainId.Mumbai;
+// export const API_URL = "https://api-mumbai.lens.dev/";
+// // process.env.NEXT_PUBLIC_LENS_API_URL || "https://api-mumbai.lens.dev/";
 
 // // Lens Constants Mumbai polygon
-export const CONTRACT_ADDRESS = "0x60Ae865ee4C725cd04353b5AAb364553f56ceF82";
-export const Collect_Module = "0x0BE6bD7092ee83D44a6eC1D949626FeE48caB30c";
-export const Reference_Module = "0x0000000000000000000000000000000000000000";
+// export const CONTRACT_ADDRESS = "0x60Ae865ee4C725cd04353b5AAb364553f56ceF82";
+// export const Collect_Module = "0x0BE6bD7092ee83D44a6eC1D949626FeE48caB30c";
+// export const Reference_Module = "0x0000000000000000000000000000000000000000";
 
-// export const chainId = ChainId.Polygon;
-// export const API_URL = "https://api.lens.dev/";
+export const chainId = ChainId.Polygon;
+export const API_URL = "https://api.lens.dev/";
 
-// // Lens Constants Ethmainnet Mainnet polygon
-// export const CONTRACT_ADDRESS = "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d"; // mainnet polygon
-// export const Collect_Module = "0x23b9467334bEb345aAa6fd1545538F3d54436e96";
-// export const Reference_Module = "0x081a84ABF515302a276D98Dc551E69f3CC33A833";
+// Lens Constants Ethmainnet Mainnet polygon
+export const CONTRACT_ADDRESS = "0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d"; // mainnet polygon
+export const Collect_Module = "0x23b9467334bEb345aAa6fd1545538F3d54436e96";
+export const Reference_Module = "0x081a84ABF515302a276D98Dc551E69f3CC33A833";
 
 export const ReferenceModuleInitData =
   "0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000002";
@@ -49,6 +49,8 @@ export const ProjectSecret = process.env.NEXT_PUBLIC_PROJECT_SECRET;
 export const Authorization = "Basic " + btoa(ProjectId + ":" + ProjectSecret);
 export const ProjectId_2 = process.env.NEXT_PUBLIC_PROJECT_ID_2;
 export const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY;
+export const POLYGON_ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_POLYGON_ETHERSCAN_API_KEY;
+
 
 // https://lens.infura-ipfs.io/ipfs/QmbzvmZm29afpMMwcoNFXt6EFa7E387hFvBYEnFHtcjCb2/LPERP.png
 // https://ipfs.io/ipfs/QmbzvmZm29afpMMwcoNFXt6EFa7E387hFvBYEnFHtcjCb2/LPERP.png

@@ -709,16 +709,6 @@ export type CreatePostEip712TypedDataValue = {
   referenceModuleInitData: Scalars["ReferenceModuleData"];
 };
 
-export type CreateProfileRequest = {
-  /** The follow module */
-  followModule?: InputMaybe<FollowModuleParams>;
-  /** The follow NFT URI is the NFT metadata your followers will mint when they follow you. This can be updated at all times. If you do not pass in anything it will create a super cool changing NFT which will show the last publication of your profile as the NFT which looks awesome! This means people do not have to worry about writing this logic but still have the ability to customise it for their followers */
-  followNFTURI?: InputMaybe<Scalars["Url"]>;
-  handle: Scalars["CreateHandle"];
-  /** The profile picture uri */
-  profilePictureUri?: InputMaybe<Scalars["Url"]>;
-};
-
 export type CreatePublicCommentRequest = {
   /** The collect module */
   collectModule: CollectModuleParams;
@@ -2037,7 +2027,6 @@ export type Mutation = {
   createNftGallery: Scalars["NftGalleryId"];
   createPostTypedData: CreatePostBroadcastItemResult;
   createPostViaDispatcher: RelayResult;
-  createProfile: RelayResult;
   createSetDefaultProfileTypedData: SetDefaultProfileBroadcastItemResult;
   createSetDispatcherTypedData: CreateSetDispatcherBroadcastItemResult;
   createSetFollowModuleTypedData: CreateSetFollowModuleBroadcastItemResult;
@@ -2141,10 +2130,6 @@ export type MutationCreatePostTypedDataArgs = {
 
 export type MutationCreatePostViaDispatcherArgs = {
   request: CreatePublicPostRequest;
-};
-
-export type MutationCreateProfileArgs = {
-  request: CreateProfileRequest;
 };
 
 export type MutationCreateSetDefaultProfileTypedDataArgs = {
@@ -34943,17 +34928,6 @@ export type CreateMirrorViaDispatcherMutation = {
     | { __typename?: "RelayerResult"; txHash: any; txId: any };
 };
 
-export type CreateProfileMutationVariables = Exact<{
-  request: CreateProfileRequest;
-}>;
-
-export type CreateProfileMutation = {
-  __typename?: "Mutation";
-  createProfile:
-    | { __typename: "RelayError"; reason: RelayErrorReasons }
-    | { __typename: "RelayerResult"; txHash: any };
-};
-
 export type ExplorePublicationsQueryVariables = Exact<{
   request: ExplorePublicationRequest;
 }>;
@@ -58033,41 +58007,6 @@ export const useCreateMirrorViaDispatcherMutation = <
         CreateMirrorViaDispatcherMutation,
         CreateMirrorViaDispatcherMutationVariables
       >(CreateMirrorViaDispatcherDocument, variables)(),
-    options
-  );
-export const CreateProfileDocument = `
-    mutation createProfile($request: CreateProfileRequest!) {
-  createProfile(request: $request) {
-    ... on RelayerResult {
-      txHash
-    }
-    ... on RelayError {
-      reason
-    }
-    __typename
-  }
-}
-    `;
-export const useCreateProfileMutation = <TError = unknown, TContext = unknown>(
-  options?: UseMutationOptions<
-    CreateProfileMutation,
-    TError,
-    CreateProfileMutationVariables,
-    TContext
-  >
-) =>
-  useMutation<
-    CreateProfileMutation,
-    TError,
-    CreateProfileMutationVariables,
-    TContext
-  >(
-    ["createProfile"],
-    (variables?: CreateProfileMutationVariables) =>
-      fetcher<CreateProfileMutation, CreateProfileMutationVariables>(
-        CreateProfileDocument,
-        variables
-      )(),
     options
   );
 export const ExplorePublicationsDocument = `

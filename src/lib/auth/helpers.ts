@@ -1,4 +1,4 @@
-const STORAGE_KEY = "LH_STORAGE_KEY";
+const STORAGE_KEY = "LH_STORAGE_KEY_2";
 
 export function isTokenExpired() {
   const ls = localStorage || window.localStorage;
@@ -6,36 +6,44 @@ export function isTokenExpired() {
     throw new Error("LocalStorage is not available");
   }
   const authenticationData = ls.getItem(STORAGE_KEY);
+  // console.log('login authenticationData:', authenticationData);
   if (!authenticationData) return true;
+  // console.log('login authenticationData-1:');
+
   const parseAuthenticationData = JSON.parse(authenticationData) as {
     accessToken: string;
     refreshToken: string;
     address: string;
     exp: number;
   };
-  console.log(
-    "isTokenExpired-Date.now()",
-    Date.now(),
-    parseAuthenticationData.exp
-  );
-  console.log(
-    "isTokenExpired-exp * 1000",
-    parseJwt(parseAuthenticationData.accessToken)?.exp * 1000
-  );
-  console.log(
-    "isTokenExpired-diffff+++",
-    parseJwt(parseAuthenticationData.accessToken)?.exp * 1000 - Date.now(),
-    (parseJwt(parseAuthenticationData.accessToken)?.exp * 1000 - Date.now()) /
-      60000
-  );
+  // console.log(
+  //   "login isTokenExpired-Date.now()",
+  //   Date.now(),
+  //   parseAuthenticationData.exp
+  // );
+  // console.log(
+  //   "login isTokenExpired-exp * 1000",
+  //   Date.now(),
+  //   parseJwt(parseAuthenticationData.accessToken)?.exp * 1000
+  // );
+  // console.log(
+  //   "login isTokenExpired-diffff+++",
+  //   parseJwt(parseAuthenticationData.accessToken)?.exp * 1000 - Date.now(),
+  //   (parseJwt(parseAuthenticationData.accessToken)?.exp * 1000 - Date.now()) /
+  //     60000
+  // );
+  // console.log('login authenticationData-3:');
 
   if (!parseJwt(parseAuthenticationData.accessToken)?.exp) {
+    // console.log('login authenticationData-4:');
     return true;
   }
 
   if (Date.now() <= parseJwt(parseAuthenticationData.accessToken)?.exp * 1000) {
+    // console.log('login authenticationData-5:');
     return false;
   }
+  // console.log('login authenticationData-6:');
   return true;
 }
 

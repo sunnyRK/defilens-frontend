@@ -27,7 +27,7 @@ export default function NewSideBar({ children }: Props) {
       if (!ls) {
         throw new Error("LocalStorage is not available");
       }
-      const data = ls.getItem("LH_STORAGE_KEY");
+      const data = ls.getItem("LH_STORAGE_KEY_2");
       if (data) {
         const data2 = JSON.parse(data) as {
           accessToken: string;
@@ -38,7 +38,7 @@ export default function NewSideBar({ children }: Props) {
 
         if (data2.address != undefined && data2.address != address) {
           console.log("NewSideBar-remove");
-          ls.removeItem("LH_STORAGE_KEY");
+          ls.removeItem("LH_STORAGE_KEY_2");
           setAccessToken(false);
           disConnect();
         } else {

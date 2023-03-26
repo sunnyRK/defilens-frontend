@@ -129,19 +129,19 @@ export const getMethodDataFromTx2 = async (
   const functionCall = `${methodName}(${inputType1},${inputType2})`;
   console.log("getMethodDataFromTx=functionCall", functionCall, signer);
 
-  const aaveIFace = new ethers.utils.Interface(aaveDepositAbi);
+  // const aaveIFace = new ethers.utils.Interface(aaveDepositAbi);
 
-  const datas = aaveIFace.encodeFunctionData("deposit", [
-    "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-    parseEther("10"),
-    signer._address,
-    0,
-  ]);
+  // const datas = aaveIFace.encodeFunctionData("deposit", [
+  //   "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+  //   parseEther("10"),
+  //   signer._address,
+  //   0,
+  // ]);
 
-  const tx = await signer.sendTransaction({
-    to: "0x8dFf5E27EA6b7AC08EbFdf9eB090F32ee9a30fcf",
-    data: datas,
-  });
+  // const tx = await signer.sendTransaction({
+  //   to: "0x8dFf5E27EA6b7AC08EbFdf9eB090F32ee9a30fcf",
+  //   data: datas,
+  // });
 
   // console.log("getMethodDataFromTx=tx", tx);
 };

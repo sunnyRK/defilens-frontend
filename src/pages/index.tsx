@@ -108,9 +108,7 @@ export default function Home() {
                 <Comment>
                   <Comment.Avatar
                     //  @ts-ignore
-                    src={`https://${makeURL(
-                      publication?.profile?.picture?.original?.url
-                    )}`}
+                    src={`https://${makeURL(publication?.profile?.picture?.original?.url)}`}
                   />
                   <Comment.Content>
                     <Comment.Author as="a">

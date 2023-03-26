@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "../../styles/Profile.module.css";
 import { useRouter } from "next/router";
 import { useAddress } from "@thirdweb-dev/react";
@@ -14,7 +14,6 @@ import Deposit from "../../components/apps/aave/aaveV2Matic/Deposit";
 import { protocolOptions, queryKeyToMetadata } from "../../utils/utils";
 import Withdraw from "../../components/apps/aave/aaveV2Matic/Withdraw";
 import { lensCommonSchema } from "../../types";
-import useLensUser from "../../lib/auth/useLensUser";
 import UniV2 from "../../components/apps/uniswap/Univ2";
 
 type Props = {};
@@ -27,8 +26,6 @@ export default function MyProfilePage({}: Props) {
   const router = useRouter();
   const address = useAddress();
   const { id } = router.query;
-
-  useEffect(() => {}, []);
 
   const {
     isLoading,
@@ -48,12 +45,7 @@ export default function MyProfilePage({}: Props) {
         apiUrl: defaultURL,
         user: address?.toString(),
       });
-
-  // console.log(
-  //   "useQueryData-: ",
-  //   useQueryData,
-  //   BigNumber(profileQuery.data?.defaultProfile?.id).toNumber()
-  // );
+  console.log("useQueryData: ", useQueryData);
 
   const {
     isLoading: loadingProfile,
@@ -138,19 +130,6 @@ export default function MyProfilePage({}: Props) {
 
   return (
     <>
-      {/* {!defaultURL && (
-        <>
-          <Dropdown
-            onChange={handleChange}
-            placeholder="Skills"
-            fluid
-            selection
-            options={protocolOptions}
-          />
-          <>HIIIIIII</>
-        </>
-      )}
-      {defaultURL && ( */}
       <div className={styles.profileContainer}>
         <Dropdown
           onChange={handleChange}
@@ -168,18 +147,12 @@ export default function MyProfilePage({}: Props) {
               {
                 // Iterate over the items in the publications array
                 // @ts-ignore
-                useQueryData && useQueryData[Object.keys(useQueryData)[0]].map(
+                useQueryData &&
+                  useQueryData[Object.keys(useQueryData)[0]].map(
                     (data: any, index: any) => getComponent(data, index)
                   )
               }
             </Grid>
-            // <>
-            //   {
-            //     useQueryData &&useQueryData[Object.keys(useQueryData)[0]].map(
-            //         (data: any, index: any) => getComponent(data, index)
-            //     )
-            //   }
-            // </>
           )}
         </div>
       </div>
@@ -187,3 +160,17 @@ export default function MyProfilePage({}: Props) {
     </>
   );
 }
+
+// {
+//   "data": {
+//     "openOrders": [
+//       {
+//         "id": "0xb50685c25485ca8c520f5286bbbf1d3f216d6989-0x8c835dfaa34e2ae61775e80ee29e2c724c6ae2bb-73020-75240",
+//         "liquidity": "0",
+//         "blockNumber": "11227102",
+//         "timestamp": "1654938331",
+//         "collectedFee": "0.304782120715738613"
+//       }
+//     ]
+//   }
+// }

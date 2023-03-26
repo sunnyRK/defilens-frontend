@@ -20,6 +20,9 @@ import {
   Divider,
   Table,
   Button,
+  List,
+  Image,
+  Message,
 } from "semantic-ui-react";
 import { toast } from "react-toastify";
 import { formatUrl, Network } from "../../utils/helper";
@@ -30,14 +33,30 @@ import { getEvent, getContractByTxHash } from "../../lib/events";
 // import { getDsa } from "../../lib/dsa/dsa";
 import { useAddress, useSDK, useSigner } from "@thirdweb-dev/react";
 import { add } from "lodash";
-import { getMethodDataFromTx, getMethodDataFromTx2, getNewEvent } from "../../lib/demo_events";
+import {
+  getMethodDataFromTx,
+  getMethodDataFromTx2,
+  getNewEvent,
+} from "../../lib/demo_events";
 import web3 from "web3";
-import { ethers } from "ethers";
-import {useSocialTrade} from "../../lib/hooks/socialTrade/useSocialTrade";
+import { BigNumber, ethers } from "ethers";
+import { useSocialTrade } from "../../lib/hooks/socialTrade/useSocialTrade";
+import { parseEther } from "ethers/lib/utils";
+// import { BigNumber } from "bignumber.js";
+import amdai from "../../../assets/images/amdai.png";
+import Link from "next/link";
 
 type Props = {
   publication: ExplorePublicationsQuery["explorePublications"]["items"][0];
 };
+
+const aaveDepositAbi = [
+  "function deposit(address asset, uint256 amount, address onBehalfOf, uint16 referralCode)",
+];
+
+const aaveWithdrawAbi = [
+  "function withdraw(address asset, uint256 amount, address to)",
+];
 
 export default function NewsFeed({ publication }: Props) {
   const address = useAddress(); // Detect the connected address
@@ -45,7 +64,7 @@ export default function NewsFeed({ publication }: Props) {
   const signer = useSigner();
 
   const { mutateAsync: createComment } = useCreateComment();
-  const { mutateAsync: doSocialTrade} = useSocialTrade();
+  const { mutateAsync: doSocialTrade } = useSocialTrade();
 
   const [comment, setComment] = useState("");
   const [collectLoading, setCollectLoading] = useState(false);
@@ -122,52 +141,120 @@ export default function NewsFeed({ publication }: Props) {
     }
   };
 
-  // const handleCopyTrade = async (
-  //   e: any,
-  //   network: any,
-  //   txHash: any,
-  //   methodName: any
-  // ) => {
-  //   try {
-  //     console.log('handleCopyTrade', txHash, methodName);
-  //     // if (address) {
-  //     //   await getDsa(address);
-  //     // }
-  //     // console.log('handleCopyTrade-address', address);
+  const makeInput = async () => {
+    try {
+      const value = publication.metadata.attributes[6].value;
+      const decimal = publication.metadata.attributes[9].value;
+      const action = publication.metadata.attributes[4].value;
 
-  //     // Network
-  //     // Provider
-  //     // Contract Address and Instance
-  //     // ABI
-  //     // Method Name
-  //     // Params
+      if (!value) return;
 
-  //     if (network == Network.POLYGON_MAINNET) {
-  //       // console.log('event-network-1', network);
-  //       // const reciept: any = await getNewEvent(
-  //       //   "polygon",
-  //       //   txHash
-  //       // );
-  //       // await getMethodDataFromTx2(signer, txHash, reciept);
-  //       await doSocialTrade(txHash)
-  //     } else if (network == Network.ETHEREUM_MAINNET) {
-  //       console.log("event-network-2", network);
-  //       // await getNewEvent("mainnet", txHash);
-  //     } else if (network == Network.OPTIMISM_MAINNET) {
-  //       console.log("event-network-3", network);
-  //       // await getNewEvent("optimism", txHash);
-  //     }
-  //   } catch (error) {
-  //     console.log("handleCopyTrade-error", error);
-  //   }
-  // };
+      const resetData = parseEther(value);
+      const amount = BigNumber.from(resetData)
+        .mul(BigNumber.from(10).pow(BigNumber.from(decimal)))
+        .div(parseEther("1"));
+      console.log("amount", amount.toString());
+
+      if (action == "Deposit") {
+        const tokenAddress = publication.metadata.attributes[5].value;
+        return [[tokenAddress, amount, address, 0], "deposit", aaveDepositAbi];
+      } else if (action === "RedeemUnderlying") {
+        const tokenAddress = publication.metadata.attributes[10].value;
+        return [[tokenAddress, amount, address], "withdraw", aaveWithdrawAbi];
+      } else {
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const handleCopyTrade = async (
+    e: any,
+    network: any,
+    txHash: any,
+    methodName: any
+  ) => {
+    try {
+      console.log("handleCopyTrade", txHash, methodName);
+      // if (address) {
+      //   await getDsa(address);
+      // }
+      // console.log('handleCopyTrade-address', address);
+
+      // Network
+      // Provider
+      // Contract Address and Instance
+      // ABI
+      // Method Name
+      // Params
+
+      if (network == Network.POLYGON_MAINNET) {
+        // console.log('event-network-1', network);
+        const reciept: any = await getNewEvent("polygon", txHash);
+        // await getMethodDataFromTx2(signer, txHash, reciept);
+        console.log("reciept", reciept.to);
+
+        const callDataInput = await makeInput();
+        await doSocialTrade({ calldata: callDataInput, to: reciept.to });
+      } else if (network == Network.ETHEREUM_MAINNET) {
+        console.log("event-network-2", network);
+        // await getNewEvent("mainnet", txHash);
+      } else if (network == Network.OPTIMISM_MAINNET) {
+        console.log("event-network-3", network);
+        // await getNewEvent("optimism", txHash);
+      }
+    } catch (error) {
+      console.log("handleCopyTrade-error", error);
+    }
+  };
+
+  const handleImage = async (): Promise<string> => {
+    // if (tokenName == "WMATIC") {
+    //   return "https://polygonscan.com/token/images/wMatic_32.png";
+    // } else {
+      return "https://polygonscan.com/token/images/wMatic_32.png";
+    // }
+  }
 
   return (
     <>
       <div style={{ margin: "0px" }}>
-        <Card style={{ width: "auto" }}>
+        {/* e6ffe6 */}
+        {/* fff2f2 */}
+        <Card
+          style={{
+            width: "auto",
+            backgroundColor: `${
+              publication.metadata.attributes[4].value == "Deposit"
+                ? "#e6ffe6"
+                : "#fff2f2"
+            }`,
+          }}
+        >
           <Card.Content>
             <Card.Description>
+              <Message info>
+                <Message.Header>
+                  {/* AppName */}
+                  {publication.metadata.attributes[2] &&
+                    publication.metadata.attributes[2].value}
+                  {"-"}
+                  {/* Version   */}
+                  {publication.metadata.attributes[3] &&
+                    publication.metadata.attributes[3].value}{" "}
+                  {/* Action Tx */}
+                  {publication.metadata.attributes[4] &&
+                    publication.metadata.attributes[4].value}{" "}
+                  {" ("}
+                  {/* ChainName */}
+                  {publication.metadata.attributes[0] &&
+                    publication.metadata.attributes[0].value}
+                  {" Chain)"}
+                </Message.Header>
+                <p>{publication.metadata.content}</p>
+                {/* <span>{publication.metadata.description}</span> */}
+              </Message>
+
               <Divider horizontal>
                 <Header as="h4">
                   <Icon name="tag" />
@@ -175,6 +262,81 @@ export default function NewsFeed({ publication }: Props) {
                 </Header>
               </Divider>
 
+              <List>
+                
+                <List.Item>
+                  <Image
+                    avatar
+                    // src={amdai}
+                    src="https://polygonscan.com/token/images/centre-usdc_32.png"
+                  />
+                  {/* <img src="https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=024" alt="coin" /> */}
+                  <List.Content>
+                    <List.Header as="a">
+                      <a
+                        target="_blank"
+                        href={`https://polygonscan.com/address/${publication.metadata.attributes[5].value}`}
+                      >
+                        {publication.metadata.attributes[8].value}
+                      </a> <span style={{color: "black"}}>{" You give"}</span>
+                    </List.Header>
+
+                    <List.Description>
+                      <Icon name="arrow right"></Icon>{" "}
+                      <a>
+                        <b>
+                          <a
+                            target="_blank"
+                            href={`https://polygonscan.com/address/${publication.metadata.attributes[5].value}`}
+                          >
+                            {publication.metadata.attributes[8].value}
+                          </a>
+                          {" ("}
+                          {publication.metadata.attributes[6].value}
+                          {") "}
+                        </b>
+                      </a>
+                    </List.Description>
+                  </List.Content>
+                </List.Item>
+
+                <List.Item>
+                  <Image
+                    avatar
+                    src="https://polygonscan.com/token/images/amusdc.png"
+                  />
+                  {/* <img src="https://cryptologos.cc/logos/usd-coin-usdc-logo.svg?v=024" alt="coin" /> */}
+                  <List.Content>
+                    <List.Header as="a">
+                      <a
+                        target="_blank"
+                        href={`https://polygonscan.com/address/${publication.metadata.attributes[10].value}`}
+                      >
+                        {publication.metadata.attributes[13].value}
+                      </a> <span style={{color: "black"}}>{" You get"}</span>
+                    </List.Header>
+
+                    <List.Description>
+                      <Icon name="arrow left"></Icon>{" "}
+                      <a>
+                        {/* <b>{publication.metadata.attributes[8].value}</b> */}
+                        <b>
+                          <a
+                            target="_blank"
+                            href={`https://polygonscan.com/address/${publication.metadata.attributes[10].value}`}
+                          >
+                            {publication.metadata.attributes[13].value}
+                          </a>
+                          {" ("}
+                          {publication.metadata.attributes[11].value}
+                          {") "}
+                        </b>
+                      </a>
+                    </List.Description>
+                  </List.Content>
+                </List.Item>
+              </List>
+              {/* 
               <Table definition>
                 <Table.Body>
                   {publication.metadata.attributes &&
@@ -201,7 +363,7 @@ export default function NewsFeed({ publication }: Props) {
                         </Table.Row>
                       ))}
                 </Table.Body>
-              </Table>
+              </Table> */}
             </Card.Description>
           </Card.Content>
 
@@ -243,7 +405,7 @@ export default function NewsFeed({ publication }: Props) {
           </Card.Content>
 
           <Card.Content extra>
-            <div className="ui two buttons">
+            <div className="ui three buttons">
               <Button
                 style={{ marginRight: "2px" }}
                 basic
@@ -270,11 +432,6 @@ export default function NewsFeed({ publication }: Props) {
                 <Icon name="share" />
                 Mirror
               </Button>
-            </div>
-          </Card.Content>
-
-          {/* 
-            <Card.Content>
               <Button
                 style={{ marginLeft: "2px" }}
                 basic
@@ -296,8 +453,8 @@ export default function NewsFeed({ publication }: Props) {
                 <Icon name="copy" />
                 Copy Trade
               </Button>
-            </Card.Content> 
-          */}
+            </div>
+          </Card.Content>
 
           <Card.Content>
             <Card.Description>

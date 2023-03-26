@@ -44,9 +44,9 @@ export const queryKeyToMetadata: any = {
     version: "V2",
     name: "AAVE",
     action: "Deposit",
-    content: "Lended Asset on Aave V2 protocol-testMumbaii3.",
+    content: "Lended Asset on Aave V2 protocol-testMumbai.",
     description:
-      "Lended Asset using Deposit/Mint method of Aave V2 protocol-testMumbaii3.",
+      "Lended Asset using Deposit/Mint method of Aave V2 protocol-testMumbai.",
   },
   aave_withdraw_matic_v2: {
     apiUrl: AAVE_V2_MATIC_SUBGRAPH,
@@ -57,9 +57,9 @@ export const queryKeyToMetadata: any = {
     version: "V2",
     name: "AAVE",
     action: "Withdraw",
-    content: "Withdraw the Lended Asset on Aave V2 protocol-testMumbaii3.",
+    content: "Withdraw the Lended Asset on Aave V2 protocol-testMumbai.",
     description:
-      "Lended Asset using Withdraw/Burn method of Aave V2 protocol-testMumbaii3.",
+      "Lended Asset using Withdraw/Burn method of Aave V2 protocol-testMumbai.",
   },
   aave_deposit_eth_v2: {
     apiUrl: AAVE_V2_ETHEREUM_SUBGRAPH,
@@ -96,7 +96,9 @@ export const feedKeyData: any = {
     isAlternate: true,
     alternate_methodName: "deposit",
     alternate_contractAddress: "0x8dFf5E27EA6b7AC08EbFdf9eB090F32ee9a30fcf",
-    alternate_abi: ["function deposit(address asset, uint256 amount, address onBehalfOf, uint16 referralCode)"],
+    alternate_abi: [
+      "function deposit(address asset, uint256 amount, address onBehalfOf, uint16 referralCode)",
+    ],
     // params: 'deposit(address,uint256,address,uint16)'
-  }
-}
+  },
+};

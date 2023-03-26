@@ -49,8 +49,8 @@ export const ProjectSecret = process.env.NEXT_PUBLIC_PROJECT_SECRET;
 export const Authorization = "Basic " + btoa(ProjectId + ":" + ProjectSecret);
 export const ProjectId_2 = process.env.NEXT_PUBLIC_PROJECT_ID_2;
 export const ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY;
-export const POLYGON_ETHERSCAN_API_KEY = process.env.NEXT_PUBLIC_POLYGON_ETHERSCAN_API_KEY;
-
+export const POLYGON_ETHERSCAN_API_KEY =
+  process.env.NEXT_PUBLIC_POLYGON_ETHERSCAN_API_KEY;
 
 // https://lens.infura-ipfs.io/ipfs/QmbzvmZm29afpMMwcoNFXt6EFa7E387hFvBYEnFHtcjCb2/LPERP.png
 // https://ipfs.io/ipfs/QmbzvmZm29afpMMwcoNFXt6EFa7E387hFvBYEnFHtcjCb2/LPERP.png

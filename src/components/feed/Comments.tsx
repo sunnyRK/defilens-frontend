@@ -39,7 +39,10 @@ export default function Comments(comment: any, index: any) {
       limit: 10,
     },
   });
-  console.log("comments-replies", comments);
+  console.log(
+    "comments-replies",
+    comment.comment.profile.picture.original.url.split("//")[1]
+  );
 
   const [state, dispatch] = React.useReducer(exampleReducer, {
     open: false,
@@ -73,7 +76,7 @@ export default function Comments(comment: any, index: any) {
           <Comment.Group threaded>
             <Comment>
               <Comment.Avatar
-                src={`https://ipfs.io/ipfs/${
+                src={`https://${
                   comment.comment.profile.picture.original.url.split("//")[1]
                 }`}
               />
@@ -111,7 +114,7 @@ export default function Comments(comment: any, index: any) {
                         <>
                           {/* <CommentsThread comment={comment} key={comment.id} /> */}
                           <Comment.Avatar
-                            src={`https://ipfs.io/ipfs/${
+                            src={`https://${
                               comment.profile.picture.original.url.split(
                                 "//"
                               )[1]

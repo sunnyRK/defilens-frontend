@@ -1,4 +1,4 @@
-const STORAGE_KEY = "LH_STORAGE_KEY_2";
+const STORAGE_KEY = "LH_STORAGE_KEY";
 
 export function isTokenExpired() {
   const ls = localStorage || window.localStorage;

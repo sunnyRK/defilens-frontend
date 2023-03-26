@@ -80,6 +80,23 @@ const config: CodegenConfig = {
         fetcher: { func: "./auth-defi-fetcher#fetcher", isReactHook: false },
       },
     },
+    // Perp
+    "src/query/thegraph/perpOp/generated.ts": {
+      // preset: 'client',
+      schema:
+        "https://thegraph-api.perp.fi/subgraphs/name/perpetual-protocol/perpetual-v2-optimism",
+      plugins: [
+        "typescript",
+        "typescript-operations",
+        "typescript-react-query",
+        "fragment-matcher",
+      ],
+      documents: "src/query/thegraph/perpOp/*.graphql",
+      config: {
+        dedupeFragments: true,
+        fetcher: { func: "./auth-defi-fetcher#fetcher", isReactHook: false },
+      },
+    },
   },
 };
 

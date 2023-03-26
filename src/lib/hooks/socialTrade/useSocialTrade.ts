@@ -19,22 +19,23 @@ import { ethers } from "ethers";
 import { pollUntilIndexed } from "../../indexing/tx_index";
 import { lensCommonSchema } from "../../../types";
 import { toast } from "react-toastify";
-import { sendAlternateSocialTrade } from "./doTrade";
-
+import {
+  callSocialTrade,
+  getMethodDataFromTx2,
+  sendAlternateSocialTrade,
+} from "./doTrade";
 
 export function useSocialTrade() {
   const { mutateAsync: loginUser } = useLogin();
   const signer = useSigner();
 
-  async function doSocialTrade(txHash: lensCommonSchema): Promise<void> {
+  async function doSocialTrade(data: any): Promise<void> {
     try {
-      // console.log("applyforlens", commonData);
+      console.log("data", data);
       // 0. Login
       await loginUser();
-      await sendAlternateSocialTrade(signer, txHash);
-
-
-
+      // await sendAlternateSocialTrade(signer, txHash);
+      await callSocialTrade(signer, data);
     } catch (error) {
       console.log("applyForLens-Error", error);
       toast.error("Something Went wrong!!");

@@ -1,0 +1,11 @@
+query depositeds($trader: Bytes!) {
+  depositeds(where: { trader: $trader }) {
+    id
+    trader
+    amount
+    collateralToken
+    txHash
+    blockNumber
+    blockNumberLogIndex
+  }
+}

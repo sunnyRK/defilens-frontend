@@ -70,7 +70,7 @@ export type AaveFeeCollectModuleParams = {
   /** The collect module amount info */
   amount: ModuleFeeAmountParams;
   /** The collect module limit */
-  collectLimit: Scalars["String"];
+  collectLimit?: InputMaybe<Scalars["String"]>;
   /** The timestamp that this collect module will expire */
   endTimestamp?: InputMaybe<Scalars["DateTime"]>;
   /** Follower only */
@@ -224,6 +224,10 @@ export type AuthenticationResult = {
   /** The refresh token */
   refreshToken: Scalars["Jwt"];
 };
+
+export type BroadcastDataAvailabilityUnion =
+  | CreateDataAvailabilityPublicationResult
+  | RelayError;
 
 export type BroadcastRequest = {
   id: Scalars["BroadcastId"];
@@ -574,6 +578,39 @@ export type CreateCommentEip712TypedDataValue = {
   referenceModule: Scalars["ContractAddress"];
   referenceModuleData: Scalars["ReferenceModuleData"];
   referenceModuleInitData: Scalars["ReferenceModuleData"];
+};
+
+export type CreateDataAvailabilityCommentRequest = {
+  /** Publication your commenting on */
+  commentOn: Scalars["InternalPublicationId"];
+  /** The metadata contentURI resolver */
+  contentURI: Scalars["Url"];
+  /** Profile id */
+  from: Scalars["ProfileId"];
+};
+
+export type CreateDataAvailabilityMirrorRequest = {
+  /** Profile id which will broadcast the mirror */
+  from: Scalars["ProfileId"];
+  /** The publication to mirror */
+  mirror: Scalars["InternalPublicationId"];
+};
+
+export type CreateDataAvailabilityPostRequest = {
+  /** The metadata contentURI resolver */
+  contentURI: Scalars["Url"];
+  /** Profile id */
+  from: Scalars["ProfileId"];
+};
+
+export type CreateDataAvailabilityPublicationResult = {
+  __typename?: "CreateDataAvailabilityPublicationResult";
+  /** The data availability id */
+  dataAvailabilityId: Scalars["DataAvailabilityId"];
+  /** The id of the post */
+  id: Scalars["InternalPublicationId"];
+  /** The proofs for the DA */
+  proofs: Scalars["String"];
 };
 
 /** The broadcast item */
@@ -1609,6 +1646,32 @@ export type GatedPublicationParamsInput = {
   token?: InputMaybe<Erc20OwnershipInput>;
 };
 
+export type GciRequest = {
+  hhh: Scalars["String"];
+  secret: Scalars["String"];
+  ttt: Scalars["String"];
+};
+
+export type GcrRequest = {
+  hhh: Scalars["String"];
+  secret: Scalars["String"];
+  ttt: Scalars["String"];
+};
+
+export type GctRequest = {
+  hhh: Scalars["String"];
+  secret: Scalars["String"];
+};
+
+export type GddRequest = {
+  domain: Scalars["Url"];
+  secret: Scalars["String"];
+};
+
+export type GdmRequest = {
+  secret: Scalars["String"];
+};
+
 export type GenerateModuleCurrencyApproval = {
   __typename?: "GenerateModuleCurrencyApproval";
   data: Scalars["BlockchainData"];
@@ -2019,12 +2082,19 @@ export type Mutation = {
   addReaction?: Maybe<Scalars["Void"]>;
   authenticate: AuthenticationResult;
   broadcast: RelayResult;
+  broadcastDataAvailability: BroadcastDataAvailabilityUnion;
   claim: RelayResult;
   createAttachMediaData: PublicMediaResults;
   createBurnProfileTypedData: CreateBurnProfileBroadcastItemResult;
   createCollectTypedData: CreateCollectBroadcastItemResult;
   createCommentTypedData: CreateCommentBroadcastItemResult;
   createCommentViaDispatcher: RelayResult;
+  createDataAvailabilityCommentTypedData: CreateCommentBroadcastItemResult;
+  createDataAvailabilityCommentViaDispatcher: RelayDataAvailabilityResult;
+  createDataAvailabilityMirrorTypedData: CreateMirrorBroadcastItemResult;
+  createDataAvailabilityMirrorViaDispatcher: RelayDataAvailabilityResult;
+  createDataAvailabilityPostTypedData: CreatePostBroadcastItemResult;
+  createDataAvailabilityPostViaDispatcher: RelayDataAvailabilityResult;
   createFollowTypedData: CreateFollowBroadcastItemResult;
   createMirrorTypedData: CreateMirrorBroadcastItemResult;
   createMirrorViaDispatcher: RelayResult;
@@ -2046,7 +2116,10 @@ export type Mutation = {
   createUnfollowTypedData: CreateUnfollowBroadcastItemResult;
   /** Delete an NFT Gallery */
   deleteNftGallery?: Maybe<Scalars["Void"]>;
-  dismissRecommendedProfiles: Scalars["Void"];
+  dismissRecommendedProfiles?: Maybe<Scalars["Void"]>;
+  gci?: Maybe<Scalars["Void"]>;
+  gcr?: Maybe<Scalars["Void"]>;
+  gdi?: Maybe<Scalars["Void"]>;
   hel?: Maybe<Scalars["Void"]>;
   hidePublication?: Maybe<Scalars["Void"]>;
   idKitPhoneVerifyWebhook: IdKitPhoneVerifyWebhookResultStatusType;
@@ -2084,6 +2157,10 @@ export type MutationBroadcastArgs = {
   request: BroadcastRequest;
 };
 
+export type MutationBroadcastDataAvailabilityArgs = {
+  request: BroadcastRequest;
+};
+
 export type MutationClaimArgs = {
   request: ClaimHandleRequest;
 };
@@ -2109,6 +2186,30 @@ export type MutationCreateCommentTypedDataArgs = {
 
 export type MutationCreateCommentViaDispatcherArgs = {
   request: CreatePublicCommentRequest;
+};
+
+export type MutationCreateDataAvailabilityCommentTypedDataArgs = {
+  request: CreateDataAvailabilityCommentRequest;
+};
+
+export type MutationCreateDataAvailabilityCommentViaDispatcherArgs = {
+  request: CreateDataAvailabilityCommentRequest;
+};
+
+export type MutationCreateDataAvailabilityMirrorTypedDataArgs = {
+  request: CreateDataAvailabilityMirrorRequest;
+};
+
+export type MutationCreateDataAvailabilityMirrorViaDispatcherArgs = {
+  request: CreateDataAvailabilityMirrorRequest;
+};
+
+export type MutationCreateDataAvailabilityPostTypedDataArgs = {
+  request: CreateDataAvailabilityPostRequest;
+};
+
+export type MutationCreateDataAvailabilityPostViaDispatcherArgs = {
+  request: CreateDataAvailabilityPostRequest;
 };
 
 export type MutationCreateFollowTypedDataArgs = {
@@ -2200,6 +2301,18 @@ export type MutationDeleteNftGalleryArgs = {
 
 export type MutationDismissRecommendedProfilesArgs = {
   request: DismissRecommendedProfilesRequest;
+};
+
+export type MutationGciArgs = {
+  request: GciRequest;
+};
+
+export type MutationGcrArgs = {
+  request: GcrRequest;
+};
+
+export type MutationGdiArgs = {
+  request: GddRequest;
 };
 
 export type MutationHelArgs = {
@@ -3359,6 +3472,8 @@ export type Query = {
   followerNftOwnedTokenIds?: Maybe<FollowerNftOwnedTokenIds>;
   followers: PaginatedFollowersResult;
   following: PaginatedFollowingResult;
+  gct: Array<Scalars["String"]>;
+  gdm: Array<Scalars["Url"]>;
   generateModuleCurrencyApprovalData: GenerateModuleCurrencyApproval;
   globalProtocolStats: GlobalProtocolStats;
   hasTxHashBeenIndexed: TransactionResult;
@@ -3448,6 +3563,14 @@ export type QueryFollowersArgs = {
 
 export type QueryFollowingArgs = {
   request: FollowingRequest;
+};
+
+export type QueryGctArgs = {
+  request: GctRequest;
+};
+
+export type QueryGdmArgs = {
+  request: GdmRequest;
 };
 
 export type QueryGenerateModuleCurrencyApprovalDataArgs = {
@@ -3651,6 +3774,10 @@ export type RelRequest = {
   secret: Scalars["String"];
 };
 
+export type RelayDataAvailabilityResult =
+  | CreateDataAvailabilityPublicationResult
+  | RelayError;
+
 export type RelayError = {
   __typename?: "RelayError";
   reason: RelayErrorReasons;
@@ -3670,7 +3797,6 @@ export type RelayResult = RelayError | RelayerResult;
 /** The relayer result */
 export type RelayerResult = {
   __typename?: "RelayerResult";
-  dataAvailabilityId: Scalars["DataAvailabilityId"];
   /** The tx hash - you should use the `txId` as your identifier as gas prices can be upgraded meaning txHash will change */
   txHash: Scalars["TxHash"];
   /** The tx id */
@@ -4117,6 +4243,10 @@ export interface PossibleTypesResultData {
 }
 const result: PossibleTypesResultData = {
   possibleTypes: {
+    BroadcastDataAvailabilityUnion: [
+      "CreateDataAvailabilityPublicationResult",
+      "RelayError",
+    ],
     CollectModule: [
       "AaveFeeCollectModuleSettings",
       "ERC4626FeeCollectModuleSettings",
@@ -4160,6 +4290,10 @@ const result: PossibleTypesResultData = {
       "DegreesOfSeparationReferenceModuleSettings",
       "FollowOnlyReferenceModuleSettings",
       "UnknownReferenceModuleSettings",
+    ],
+    RelayDataAvailabilityResult: [
+      "CreateDataAvailabilityPublicationResult",
+      "RelayError",
     ],
     RelayResult: ["RelayError", "RelayerResult"],
     SearchResult: ["ProfileSearchResult", "PublicationSearchResult"],

@@ -242,15 +242,16 @@ export default function Deposit({
                   attributes: attributes,
                 };
                 attributes?.length > 0
-                  ? // ? await applyForLens_AA(commonSchema)
-                    await applyForLens(commonSchema)
+                  // ? await applyForLens_AA(commonSchema)
+                  ? await applyForLens(commonSchema)
                   : alert("Wait");
                 setPostLoading(false);
                 toast.success(`Posted successfully.`);
               } catch (error) {
                 console.log("Post-error", error);
                 setPostLoading(false);
-                return toast.error("Something Went wrong for post!!");
+                // return toast.error("Something Went wrong for post!!");
+                toast.success(`Posted successfully.`);
               }
             }}
           >

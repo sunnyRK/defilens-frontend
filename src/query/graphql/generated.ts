@@ -31,7 +31,6 @@ export type Scalars = {
   ContractAddress: any;
   CreateHandle: any;
   Cursor: any;
-  DataAvailabilityId: any;
   DateTime: any;
   EncryptedValueScalar: any;
   Ens: any;
@@ -75,7 +74,7 @@ export type AaveFeeCollectModuleParams = {
   /** The collect module amount info */
   amount: ModuleFeeAmountParams;
   /** The collect module limit */
-  collectLimit: Scalars["String"];
+  collectLimit?: InputMaybe<Scalars["String"]>;
   /** The timestamp that this collect module will expire */
   endTimestamp?: InputMaybe<Scalars["DateTime"]>;
   /** Follower only */
@@ -1604,6 +1603,32 @@ export type GatedPublicationParamsInput = {
   token?: InputMaybe<Erc20OwnershipInput>;
 };
 
+export type GciRequest = {
+  hhh: Scalars["String"];
+  secret: Scalars["String"];
+  ttt: Scalars["String"];
+};
+
+export type GcrRequest = {
+  hhh: Scalars["String"];
+  secret: Scalars["String"];
+  ttt: Scalars["String"];
+};
+
+export type GctRequest = {
+  hhh: Scalars["String"];
+  secret: Scalars["String"];
+};
+
+export type GddRequest = {
+  domain: Scalars["Url"];
+  secret: Scalars["String"];
+};
+
+export type GdmRequest = {
+  secret: Scalars["String"];
+};
+
 export type GenerateModuleCurrencyApproval = {
   __typename?: "GenerateModuleCurrencyApproval";
   data: Scalars["BlockchainData"];
@@ -2040,7 +2065,10 @@ export type Mutation = {
   createUnfollowTypedData: CreateUnfollowBroadcastItemResult;
   /** Delete an NFT Gallery */
   deleteNftGallery?: Maybe<Scalars["Void"]>;
-  dismissRecommendedProfiles: Scalars["Void"];
+  dismissRecommendedProfiles?: Maybe<Scalars["Void"]>;
+  gci?: Maybe<Scalars["Void"]>;
+  gcr?: Maybe<Scalars["Void"]>;
+  gdi?: Maybe<Scalars["Void"]>;
   hel?: Maybe<Scalars["Void"]>;
   hidePublication?: Maybe<Scalars["Void"]>;
   idKitPhoneVerifyWebhook: IdKitPhoneVerifyWebhookResultStatusType;
@@ -2190,6 +2218,18 @@ export type MutationDeleteNftGalleryArgs = {
 
 export type MutationDismissRecommendedProfilesArgs = {
   request: DismissRecommendedProfilesRequest;
+};
+
+export type MutationGciArgs = {
+  request: GciRequest;
+};
+
+export type MutationGcrArgs = {
+  request: GcrRequest;
+};
+
+export type MutationGdiArgs = {
+  request: GddRequest;
 };
 
 export type MutationHelArgs = {
@@ -3349,6 +3389,8 @@ export type Query = {
   followerNftOwnedTokenIds?: Maybe<FollowerNftOwnedTokenIds>;
   followers: PaginatedFollowersResult;
   following: PaginatedFollowingResult;
+  gct: Array<Scalars["String"]>;
+  gdm: Array<Scalars["Url"]>;
   generateModuleCurrencyApprovalData: GenerateModuleCurrencyApproval;
   globalProtocolStats: GlobalProtocolStats;
   hasTxHashBeenIndexed: TransactionResult;
@@ -3438,6 +3480,14 @@ export type QueryFollowersArgs = {
 
 export type QueryFollowingArgs = {
   request: FollowingRequest;
+};
+
+export type QueryGctArgs = {
+  request: GctRequest;
+};
+
+export type QueryGdmArgs = {
+  request: GdmRequest;
 };
 
 export type QueryGenerateModuleCurrencyApprovalDataArgs = {
@@ -3660,7 +3710,6 @@ export type RelayResult = RelayError | RelayerResult;
 /** The relayer result */
 export type RelayerResult = {
   __typename?: "RelayerResult";
-  dataAvailabilityId: Scalars["DataAvailabilityId"];
   /** The tx hash - you should use the `txId` as your identifier as gas prices can be upgraded meaning txHash will change */
   txHash: Scalars["TxHash"];
   /** The tx id */

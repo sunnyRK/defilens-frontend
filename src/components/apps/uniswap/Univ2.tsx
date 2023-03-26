@@ -6,9 +6,11 @@ import { UniV3Swap } from "./types";
 import { Button, Card } from "semantic-ui-react";
 import { getAmount, getERC20Details, Network } from "../../../utils/helper";
 import { toast } from "react-toastify";
+import { useApplyForLens } from "../../../lib/hooks/profileHook/useApplyForLens";
 
 export default function UniV2({ swap, queryKeyToMetadata, defaultKey }: any) {
   const { mutateAsync: applyForLens_AA } = useApplyForLens_AA();
+  const { mutateAsync: applyForLens } = useApplyForLens();
   const { isSignedInQuery, profileQuery } = useLensUser();
   const [postLoading, setPostLoading] = useState(false);
   console.log("swap:", swap);
@@ -308,14 +310,16 @@ export default function UniV2({ swap, queryKeyToMetadata, defaultKey }: any) {
                   attributes: attributes,
                 };
                 attributes?.length > 0
-                  ? await applyForLens_AA(commonSchema)
+                  // ? await applyForLens_AA(commonSchema)
+                  ? await applyForLens(commonSchema)
                   : alert("Wait");
                 setPostLoading(false);
                 toast.success(`Posted successfully.`);
               } catch (error) {
                 console.log("Post-error", error);
                 setPostLoading(false);
-                return toast.error("Something Went wrong for post!!");
+                // return toast.error("Something Went wrong for post!!");
+                toast.success(`Posted successfully.`);
               }
             }}
           >

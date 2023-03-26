@@ -11,7 +11,15 @@ import {
 } from "../query/graphql/generated";
 import styles from "../styles/Home.module.css";
 import { formatDate, formatUrl, Network } from "../utils/helper";
-import { Accordion, Icon, Message, Comment, Button } from "semantic-ui-react";
+import {
+  Accordion,
+  Icon,
+  Message,
+  Comment,
+  Button,
+  List,
+  Image,
+} from "semantic-ui-react";
 import useLensUser from "../lib/auth/useLensUser";
 import { url } from "inspector";
 
@@ -26,37 +34,37 @@ export default function Home() {
     limit: 50,
   };
 
-  const { isLoading, error, data, fetchStatus } =
-    useExplorePublicationsQuery(
-      {
-        request,
-      },
-      {
-        // Don't refetch the user comes back
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-      }
-    );
-  console.log("data", data, fetchStatus);
+  // const { isLoading, error, data, fetchStatus } =
+  //   useExplorePublicationsQuery(
+  //     {
+  //       request,
+  //     },
+  //     {
+  //       // Don't refetch the user comes back
+  //       refetchOnWindowFocus: false,
+  //       refetchOnReconnect: false,
+  //     }
+  //   );
+  // console.log("data", data, fetchStatus);
 
-  // const {
-  //   isLoading,
-  //   error,
-  //   data: data,
-  // } = usePublicationsQuery({
-  //   request: {
-  //     profileIds: profileQuery.data?.defaultProfile?.id,
-  //     publicationTypes: [PublicationTypes.Post],
-  //     limit: 10,
-  //     sources: ["defilens-demo-3"],
-  //     // metadata: {
-  //     //   tags: {
-  //     //     oneOf: ["check_deposit", "check_deposit2"],
-  //     //   },
-  //     // },
-  //   },
-  // });
-  // console.log("data", data);
+  const {
+    isLoading,
+    error,
+    data: data,
+  } = usePublicationsQuery({
+    request: {
+      profileIds: profileQuery.data?.defaultProfile?.id,
+      publicationTypes: [PublicationTypes.Post],
+      limit: 10,
+      sources: ["defilens-demo-3"],
+      // metadata: {
+      //   tags: {
+      //     oneOf: ["check_deposit", "check_deposit2"],
+      //   },
+      // },
+    },
+  });
+  console.log("data", data);
 
   if (error) {
     return <div className={styles.container}>Error...</div>;
@@ -81,13 +89,15 @@ export default function Home() {
   };
 
   const makeURL = (url: any) => {
-    return `https://ipfs.io/ipfs/${formatUrl(url)[1]}` || "";
-  }
+    console.log("formatUrl(url)[1]", formatUrl(url)[1]);
+    // return `https://ipfs.io/ipfs/${formatUrl(url)[1]}` || "";
+    return formatUrl(url)[1];
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.postsContainer}>
-        {data?.explorePublications.items.map((publication, index) => (
+        {data?.publications.items.map((publication, index) => (
           <Accordion styled key={index} style={{ margin: "20px" }}>
             <Accordion.Title
               active={activeIndex === index}
@@ -98,7 +108,9 @@ export default function Home() {
                 <Comment>
                   <Comment.Avatar
                     //  @ts-ignore
-                    src={makeURL(publication?.profile?.picture?.original?.url)}
+                    src={`https://${makeURL(
+                      publication?.profile?.picture?.original?.url
+                    )}`}
                   />
                   <Comment.Content>
                     <Comment.Author as="a">
@@ -125,40 +137,13 @@ export default function Home() {
                         View Tx
                       </a>
                     </Comment.Text>
-
-                    <Message info>
-                      <Message.Header>
-                        {/* AppName */}
-                        {publication.metadata.attributes[2] &&
-                          publication.metadata.attributes[2].value}
-                        {/* {"-"} */}
-                        {/* Version   */}
-                        {publication.metadata.attributes[3] &&
-                          publication.metadata.attributes[3].value}{" "}
-                        {/* Action Tx */}
-                        {publication.metadata.attributes[4] &&
-                          publication.metadata.attributes[4].value}{" "}
-                        {" ("}
-                        {/* ChainName */}
-                        {publication.metadata.attributes[0] &&
-                          publication.metadata.attributes[0].value}
-                        {" Chain)"}
-                      </Message.Header>
-                      <p>{publication.metadata.content}</p>
-                      <span>{publication.metadata.description}</span>
-                    </Message>
                   </Comment.Content>
                 </Comment>
               </Comment.Group>
             </Accordion.Title>
-            <Accordion.Content
-              active={activeIndex === index}
-              // index={index}
-              // onClick={(e: any) => handleClick(e, index)}
-            >
-              {/* <div>Hello</div> */}
+            <div style={{ padding: "0em 1em 0.5em" }}>
               <NewsFeed publication={publication} key={publication.id} />
-            </Accordion.Content>
+            </div>
           </Accordion>
         ))}
       </div>

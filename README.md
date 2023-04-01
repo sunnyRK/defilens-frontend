@@ -33,11 +33,11 @@ Even everyone can give vote or upvote for discussions happen on any post. So in 
 
 ## Tech stack
 
-1). Solidity, ReactJS, TypeScript
-2). Lens Protocol
-3). TheGraph Protocol
-4). Polygon Networks
-5). Biconomy Account abstractions
+1). Solidity, ReactJS, TypeScript. 
+2). Lens Protocol. 
+3). TheGraph Protocol. 
+4). Polygon Networks. 
+5). Biconomy Account abstractions. 
 
 ## How to Use
 
